@@ -1,53 +1,38 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Navbar from "@/components/ui/Navbar";
+import { Box, Container, Typography } from "@mui/material";
 
 const MainLayout = () => {
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
-            {/* Navigation Bar */}
-            <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                    {/* Logo */}
-                    <Link
-                        to="/"
-                        className="text-xl font-bold text-indigo-600 tracking-tight"
-                    >
-                        ShopBack
-                    </Link>
-
-                    {/* Nav Links */}
-                    <nav className="flex items-center space-x-6">
-                        <Link
-                            to="/products"
-                            className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
-                        >
-                            Browse Products
-                        </Link>
-                        <Link
-                            to="/cart"
-                            className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
-                        >
-                            Cart{" "}
-                            <span className="ml-1 px-2 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded-full font-semibold">
-                                0
-                            </span>
-                        </Link>
-                    </nav>
-                </div>
-            </header>
+        <>
+            <Navbar />
 
             {/* Main Content Window */}
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <Container
+                component="main"
+                maxWidth="lg"
+                sx={{ flexGrow: 1, py: 4 }}
+            >
                 <Outlet />
-            </main>
+            </Container>
 
             {/* Footer */}
-            <footer className="bg-white border-t border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
-                    &copy; {new Date().getFullYear()} ShopBack E-Commerce. All
-                    rights reserved.
-                </div>
-            </footer>
-        </div>
+            <Box
+                component="footer"
+                sx={{
+                    py: 3,
+                    mt: "auto",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    borderTop: (theme) => `1px solid ${theme.palette.divider}`
+                }}
+            >
+                <Container maxWidth="lg">
+                    <Typography variant="body2" color="text.secondary" align="center">
+                        &copy; {new Date().getFullYear()} ShopBack E-Commerce. All rights reserved.
+                    </Typography>
+                </Container>
+            </Box>
+        </>
     );
 };
 
