@@ -14,17 +14,17 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: "products", element: <ProductListPage /> },
-            { path: "products/:id", element: <ProductDetailsPage /> }
-        ]
+            { path: "products/:id", element: <ProductDetailsPage /> },
+        ],
     },
     {
         path: "/",
         element: <AuthLayout />,
         children: [
             { path: "login", element: <LoginPage /> },
-            { path: "register", element: <RegisterPage /> }
-        ]
-    }
+            { path: "register", element: <RegisterPage /> },
+        ],
+    },
 ]);
 
 export default router;

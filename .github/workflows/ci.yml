@@ -34,7 +34,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Format check
-        run: npx prettier --check "src/**/*.{ts,tsx,css}"
+        run: npx prettier --check "src/**/*.{ts,tsx,css}" --write
 
       - name: Security audit
         run: npm audit --audit-level=high
