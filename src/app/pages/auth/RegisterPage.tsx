@@ -62,19 +62,6 @@ export default function RegisterPage() {
                         fullWidth
                         variant="outlined"
                         size="small"
-                        label="Full Name"
-                        sx={{
-                            mb: 2,
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "50px",
-                            },
-                        }}
-                    />
-
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
                         label="Email"
                         sx={{
                             mb: 2,
