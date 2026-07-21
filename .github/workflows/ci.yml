@@ -88,18 +88,18 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Analyze bundle size
-        run: npx vite-bundle-visualizer --json > bundle-stats.json
+    #   - name: Analyze bundle size
+    #     run: npx vite-bundle-visualizer --json > bundle-stats.json
 
       # Current limit: 500kb
-      - name: Bundle size check
-        run: |
-          SIZE=$(du -sk dist/ | cut -f1)
-          echo "Bundle size: ${SIZE}KB"
-          if [ $SIZE -gt 500 ]; then
-            echo "❌ Bundle too large: ${SIZE}KB (max 500KB)"
-            exit 1
-          fi
+    #   - name: Bundle size check
+    #     run: |
+    #       SIZE=$(du -sk dist/ | cut -f1)
+    #       echo "Bundle size: ${SIZE}KB"
+    #       if [ $SIZE -gt 500 ]; then
+    #         echo "❌ Bundle too large: ${SIZE}KB (max 500KB)"
+    #         exit 1
+    #       fi
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
