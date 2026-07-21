@@ -25,7 +25,7 @@ export default function LoginPage() {
             }}
         >
             {/* Logo */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/src/assets/logo.png"
                     alt="SwS Logo"
@@ -162,11 +162,6 @@ export default function LoginPage() {
                     </Box>
                 </CardContent>
             </Card>
-
-            {/* Help Link */}
-            <Link href="#" underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
-                Do you need help?
-            </Link>
         </Box>
     );
 }
