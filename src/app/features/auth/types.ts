@@ -33,9 +33,9 @@ export interface AuthContextType {
 
     isAuthenticated: boolean;
 
-    login: (credentials: LoginCredentials) => Promise<AuthResponse>;
+    login: (credentials: LoginCredentials) => Promise<AuthResponse | undefined>;
 
-    register: (data: RegisterData) => Promise<User>;
+    register: (data: RegisterData) => Promise<User | undefined>;
 
     logout: () => Promise<void>;
 
