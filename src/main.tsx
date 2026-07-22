@@ -9,6 +9,8 @@ import "@fontsource/roboto/700.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { AuthProvider } from "@/features/auth/context/AuthContext";
+import { AuthInterceptor } from "@/features/auth/components/AuthInterceptor";
 
 const theme = createTheme({
     palette: {
@@ -18,9 +20,13 @@ const theme = createTheme({
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-        </ThemeProvider>
+        <AuthProvider>
+            <AuthInterceptor>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <App />
+                </ThemeProvider>
+            </AuthInterceptor>
+        </AuthProvider>
     </StrictMode>,
 );

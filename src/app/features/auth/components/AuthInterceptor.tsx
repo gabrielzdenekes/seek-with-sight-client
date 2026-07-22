@@ -1,5 +1,6 @@
 import { api, apiPublic } from "@/lib/axios";
 import { useEffect, type ReactNode } from "react";
+import { useAuth } from "@/features/auth/context/useAuth";
 
 interface AxiosInterceptorProps {
   children: ReactNode;
@@ -20,7 +21,7 @@ const processRequestsQueue = (error: any, token = null) => {
     failedRequestsQueue = [];
 };
 
-export const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
+export const AuthInterceptor = ({ children }: AxiosInterceptorProps) => {
     const { accessToken, setAccessToken, logout } = useAuth();
 
     useEffect(() => {
