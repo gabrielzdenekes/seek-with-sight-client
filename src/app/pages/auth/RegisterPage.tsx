@@ -6,12 +6,71 @@ import {
     TextField,
     Button,
     Divider,
-    Link
+    Link,
+    Alert,
+    CircularProgress
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useAuth } from "@/features/auth/context/useAuth";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+    const { register } = useAuth();
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+
+    const [error, setError] = useState<string | null>(null);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+
+        // Basic front-end validation
+        if (!formData.email || !formData.password || !formData.confirmPassword) {
+            setError("Please fill in all required fields.");
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Call the register function from AuthContext
+            await register({
+                email: formData.email,
+                password: formData.password,
+            });
+
+            // Redirect to login page on success
+            navigate("/login");
+        } catch (err: any) {
+            // Display backend error message if available
+            setError(err?.message || "Registration failed. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -58,66 +117,95 @@ export default function RegisterPage() {
                         Please fill in the details below to sign up.
                     </Typography>
 
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        label="Email"
-                        sx={{
-                            mb: 2,
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "50px",
-                            },
-                        }}
-                    />
+                    {/* Display error alert if any error exists */}
+                    {error && (
+                        <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
+                            {error}
+                        </Alert>
+                    )}
 
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        type="password"
-                        label="Password"
-                        sx={{
-                            mb: 2,
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "50px",
-                            },
-                        }}
-                    />
+                    {/* Wrap inputs inside a form element */}
+                    <Box component="form" onSubmit={handleSubmit} noValidate>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            sx={{
+                                mb: 2,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "50px",
+                                },
+                            }}
+                        />
 
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        type="password"
-                        label="Confirm Password"
-                        sx={{
-                            mb: 3,
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "50px",
-                            },
-                        }}
-                    />
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            type="password"
+                            label="Password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            sx={{
+                                mb: 2,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "50px",
+                                },
+                            }}
+                        />
 
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                            backgroundColor: "#333",
-                            color: "#fff",
-                            textTransform: "none",
-                            borderRadius: "50px",
-                            py: 1,
-                            mb: 3,
-                            fontSize: "16px",
-                            "&:hover": {
-                                backgroundColor: "#aaa",
-                            },
-                        }}
-                    >
-                        Register
-                    </Button>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            type="password"
+                            label="Confirm Password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            sx={{
+                                mb: 3,
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "50px",
+                                },
+                            }}
+                        />
+
+                        <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            disableElevation
+                            disabled={isSubmitting}
+                            sx={{
+                                backgroundColor: "#333",
+                                color: "#fff",
+                                textTransform: "none",
+                                borderRadius: "50px",
+                                py: 1,
+                                mb: 3,
+                                fontSize: "16px",
+                                "&:hover": {
+                                    backgroundColor: "#aaa",
+                                },
+                            }}
+                        >
+                            {isSubmitting ? (
+                                <CircularProgress size={24} sx={{ color: "#fff" }} />
+                            ) : (
+                                "Register"
+                            )}
+                        </Button>
+                    </Box>
 
                     <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
                         Already have an account? <br />

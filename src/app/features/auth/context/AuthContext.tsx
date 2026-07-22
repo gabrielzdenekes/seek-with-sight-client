@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const register = async (registerData: RegisterData): Promise<User | undefined> => {
-        const response = await post<ApiResponse<User>>("/auth/register", registerData);
+        const response = await post<ApiResponse<User>>("/users", registerData);
 
         return response.data;
     };
