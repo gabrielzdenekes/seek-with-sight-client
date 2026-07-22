@@ -16,3 +16,8 @@ export interface RegisterData {
     password: string;
 }
 
+export interface LoginResult {
+    accessToken: string;
+
+    user: User;
+}
