@@ -21,7 +21,8 @@ export default defineConfig([
         rules: {
             indent: ["error", 4],
             quotes: ["error", "double"],
-            semi: ["error", "always"]
+            semi: ["error", "always"],
+            "@typescript-eslint/no-explicit-any": "off"
         }
     },
 ])
