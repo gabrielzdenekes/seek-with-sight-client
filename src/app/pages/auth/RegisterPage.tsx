@@ -7,58 +7,37 @@ import {
     Button,
     Divider,
     Link,
-    Alert,
-    CircularProgress
+    Alert
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SubmitButton } from "@/components/ui/SubmitButton";
+import { type RegisterState } from "@/features/auth/schemas/register-schema";
+import { useActionState, useEffect } from "react";
+import { registerAction } from "@/features/auth/actions/register-action";
+
+const initialState: RegisterState = {
+    errors: {},
+    message: null,
+    success: false,
+};
 
 export default function RegisterPage() {
     const { register } = useAuth();
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        confirmPassword: ""
-    });
+    const [state, formAction] = useActionState(
+        registerAction.bind(null, register),
+        initialState
+    );
 
-    const [error, setError] = useState<string | null>(null);
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-
-        setIsSubmitting(true);
-
-        try {
-            // Call the register function from AuthContext
-            await register({
-                email: formData.email,
-                password: formData.password,
-            });
-
-            // Redirect to login page on success
+    useEffect(() => {
+        if (state.success) {
             navigate("/login");
-        } catch (err: any) {
-            // Display backend error message if available
-            setError(err?.message || "Registration failed. Please try again.");
-        } finally {
-            setIsSubmitting(false);
         }
-    };
+    }, [state.success, navigate]);
 
     return (
         <Box
@@ -72,7 +51,6 @@ export default function RegisterPage() {
                 padding: 2,
             }}
         >
-            {/* Logo */}
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/src/assets/logo.png"
@@ -81,7 +59,6 @@ export default function RegisterPage() {
                 />
             </Box>
 
-            {/* Main Register Card */}
             <Card
                 sx={{
                     width: "100%",
@@ -106,15 +83,13 @@ export default function RegisterPage() {
                         Please fill in the details below to sign up.
                     </Typography>
 
-                    {/* Display error alert if any error exists */}
-                    {error && (
+                    {state.message && (
                         <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
-                            {error}
+                            {state.message}
                         </Alert>
                     )}
 
-                    {/* Wrap inputs inside a form element */}
-                    <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <Box component="form" action={formAction} noValidate>
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -122,9 +97,8 @@ export default function RegisterPage() {
                             label="Email"
                             name="email"
                             type="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
+                            error={!!state.errors?.email}
+                            helperText={state.errors?.email?.[0]}
                             sx={{
                                 mb: 2,
                                 "& .MuiOutlinedInput-root": {
@@ -140,9 +114,8 @@ export default function RegisterPage() {
                             type="password"
                             label="Password"
                             name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
+                            error={!!state.errors?.password}
+                            helperText={state.errors?.password?.[0]}
                             sx={{
                                 mb: 2,
                                 "& .MuiOutlinedInput-root": {
@@ -158,9 +131,8 @@ export default function RegisterPage() {
                             type="password"
                             label="Confirm Password"
                             name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
+                            error={!!state.errors?.confirmPassword}
+                            helperText={state.errors?.confirmPassword?.[0]}
                             sx={{
                                 mb: 3,
                                 "& .MuiOutlinedInput-root": {
@@ -169,31 +141,7 @@ export default function RegisterPage() {
                             }}
                         />
 
-                        <Button
-                            fullWidth
-                            type="submit"
-                            variant="contained"
-                            disableElevation
-                            disabled={isSubmitting}
-                            sx={{
-                                backgroundColor: "#333",
-                                color: "#fff",
-                                textTransform: "none",
-                                borderRadius: "50px",
-                                py: 1,
-                                mb: 3,
-                                fontSize: "16px",
-                                "&:hover": {
-                                    backgroundColor: "#aaa",
-                                },
-                            }}
-                        >
-                            {isSubmitting ? (
-                                <CircularProgress size={24} sx={{ color: "#fff" }} />
-                            ) : (
-                                "Register"
-                            )}
-                        </Button>
+                        <SubmitButton label="Register" />
                     </Box>
 
                     <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
@@ -211,7 +159,6 @@ export default function RegisterPage() {
                         sign up with your social account
                     </Typography>
 
-                    {/* Social Buttons */}
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                         <Button
                             fullWidth
