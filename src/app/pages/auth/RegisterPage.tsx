@@ -18,6 +18,7 @@ import { type RegisterState } from "@/features/auth/schemas/register-schema";
 import { useActionState, useEffect } from "react";
 import { registerAction } from "@/features/auth/actions/register-action";
 import { Link as RouterLink } from "react-router-dom";
+import { SOCIAL_COLORS } from "@/pages/auth/styles";
 
 const initialState: RegisterState = {
     errors: {},
@@ -44,7 +45,7 @@ export default function RegisterPage() {
         <Box
             sx={{
                 minHeight: "100vh",
-                backgroundColor: "#f4f4f4",
+                backgroundColor: "background.default",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -72,14 +73,14 @@ export default function RegisterPage() {
                 <CardContent sx={{ p: 4, textAlign: "center" }}>
                     <Typography
                         variant="h4"
-                        sx={{ color: "#888", fontWeight: 300, mb: 3 }}
+                        sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}
                     >
                         Create Account
                     </Typography>
 
                     <Typography
                         variant="body2"
-                        sx={{ fontWeight: 600, color: "#222", mb: 3 }}
+                        sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}
                     >
                         Please fill in the details below to sign up.
                     </Typography>
@@ -145,18 +146,18 @@ export default function RegisterPage() {
                         <SubmitButton label="Register" />
                     </Box>
 
-                    <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
+                    <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
                         Already have an account? <br />
-                        <Link component={RouterLink} to={"/login"} underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
+                        <Link component={RouterLink} to={"/login"} underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
                             Log in here
                         </Link>
                     </Typography>
 
-                    <Divider sx={{ mb: 1, color: "#aaa", fontSize: "14px" }}>
+                    <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
                         or
                     </Divider>
 
-                    <Typography variant="body2" sx={{ color: "#999", fontSize: "13px", mb: 3 }}>
+                    <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
                         sign up with your social account
                     </Typography>
 
@@ -167,14 +168,14 @@ export default function RegisterPage() {
                             disableElevation
                             startIcon={<FacebookIcon sx={{ position: "absolute", left: 16 }} />}
                             sx={{
-                                backgroundColor: "#405a93",
-                                color: "#fff",
+                                backgroundColor: SOCIAL_COLORS.facebook.main,
+                                color: "#fff", // White is universally safe to hardcode on dark brand colors
                                 textTransform: "none",
                                 borderRadius: "50px",
                                 py: 1,
                                 position: "relative",
                                 justifyContent: "center",
-                                "&:hover": { backgroundColor: "#324a7a" },
+                                "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
                             }}
                         >
                             Facebook
@@ -186,14 +187,14 @@ export default function RegisterPage() {
                             disableElevation
                             startIcon={<GoogleIcon sx={{ position: "absolute", left: 16 }} />}
                             sx={{
-                                backgroundColor: "#cb523e",
+                                backgroundColor: SOCIAL_COLORS.google.main,
                                 color: "#fff",
                                 textTransform: "none",
                                 borderRadius: "50px",
                                 py: 1,
                                 position: "relative",
                                 justifyContent: "center",
-                                "&:hover": { backgroundColor: "#b34533" },
+                                "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
                             }}
                         >
                             Google
