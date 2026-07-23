@@ -17,6 +17,7 @@ import { SubmitButton } from "@/components/ui/SubmitButton";
 import { type LoginState } from "@/features/auth/schemas/login-schema";
 import { useActionState, useEffect } from "react";
 import { loginAction } from "@/features/auth/actions/login-action";
+import { Link as RouterLink } from "react-router-dom";
 
 const initialState: LoginState = {
     errors: {},
@@ -130,7 +131,7 @@ export default function LoginPage() {
 
                     <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
                         Don't have an account? Don't worry!<br />
-                        <Link href="/register" underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
+                        <Link component={RouterLink} to={"/register"} underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
                             Create account
                         </Link>
                     </Typography>

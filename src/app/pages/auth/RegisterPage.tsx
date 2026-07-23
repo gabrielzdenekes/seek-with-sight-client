@@ -17,6 +17,7 @@ import { SubmitButton } from "@/components/ui/SubmitButton";
 import { type RegisterState } from "@/features/auth/schemas/register-schema";
 import { useActionState, useEffect } from "react";
 import { registerAction } from "@/features/auth/actions/register-action";
+import { Link as RouterLink } from "react-router-dom";
 
 const initialState: RegisterState = {
     errors: {},
@@ -146,7 +147,7 @@ export default function RegisterPage() {
 
                     <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
                         Already have an account? <br />
-                        <Link href="/login" underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
+                        <Link component={RouterLink} to={"/login"} underline="none" sx={{ color: "#007ced", fontSize: "14px", fontWeight: 500 }}>
                             Log in here
                         </Link>
                     </Typography>
