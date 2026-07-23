@@ -12,13 +12,19 @@ import {
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { type RegisterState } from "@/features/auth/schemas/register-schema";
 import { useActionState, useEffect } from "react";
 import { registerAction } from "@/features/auth/actions/register-action";
-import { Link as RouterLink } from "react-router-dom";
-import { SOCIAL_COLORS } from "@/pages/auth/styles";
+import {
+    SOCIAL_COLORS,
+    authContainerSx,
+    authCardSx,
+    roundedInputSx,
+    baseSocialButtonSx,
+    socialIconSx
+} from "@/pages/auth/styles";
 
 const initialState: RegisterState = {
     errors: {},
@@ -42,17 +48,7 @@ export default function RegisterPage() {
     }, [state.success, navigate]);
 
     return (
-        <Box
-            sx={{
-                minHeight: "100vh",
-                backgroundColor: "background.default",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 2,
-            }}
-        >
+        <Box sx={authContainerSx}>
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/logo.png"
@@ -61,27 +57,13 @@ export default function RegisterPage() {
                 />
             </Box>
 
-            <Card
-                sx={{
-                    width: "100%",
-                    maxWidth: 420,
-                    borderRadius: 2,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-                    mb: 2,
-                }}
-            >
+            <Card sx={authCardSx}>
                 <CardContent sx={{ p: 4, textAlign: "center" }}>
-                    <Typography
-                        variant="h4"
-                        sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}
-                    >
+                    <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
                         Create Account
                     </Typography>
 
-                    <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}
-                    >
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}>
                         Please fill in the details below to sign up.
                     </Typography>
 
@@ -101,12 +83,7 @@ export default function RegisterPage() {
                             type="email"
                             error={!!state.errors?.email}
                             helperText={state.errors?.email?.[0]}
-                            sx={{
-                                mb: 2,
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: "50px",
-                                },
-                            }}
+                            sx={roundedInputSx}
                         />
 
                         <TextField
@@ -118,12 +95,7 @@ export default function RegisterPage() {
                             name="password"
                             error={!!state.errors?.password}
                             helperText={state.errors?.password?.[0]}
-                            sx={{
-                                mb: 2,
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: "50px",
-                                },
-                            }}
+                            sx={roundedInputSx}
                         />
 
                         <TextField
@@ -135,12 +107,7 @@ export default function RegisterPage() {
                             name="confirmPassword"
                             error={!!state.errors?.confirmPassword}
                             helperText={state.errors?.confirmPassword?.[0]}
-                            sx={{
-                                mb: 3,
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: "50px",
-                                },
-                            }}
+                            sx={{ ...roundedInputSx, mb: 3 }}
                         />
 
                         <SubmitButton label="Register" />
@@ -148,7 +115,7 @@ export default function RegisterPage() {
 
                     <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
                         Already have an account? <br />
-                        <Link component={RouterLink} to={"/login"} underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                        <Link component={RouterLink} to="/login" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
                             Log in here
                         </Link>
                     </Typography>
@@ -166,15 +133,10 @@ export default function RegisterPage() {
                             fullWidth
                             variant="contained"
                             disableElevation
-                            startIcon={<FacebookIcon sx={{ position: "absolute", left: 16 }} />}
+                            startIcon={<FacebookIcon sx={socialIconSx} />}
                             sx={{
+                                ...baseSocialButtonSx,
                                 backgroundColor: SOCIAL_COLORS.facebook.main,
-                                color: "#fff", // White is universally safe to hardcode on dark brand colors
-                                textTransform: "none",
-                                borderRadius: "50px",
-                                py: 1,
-                                position: "relative",
-                                justifyContent: "center",
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
                             }}
                         >
@@ -185,15 +147,10 @@ export default function RegisterPage() {
                             fullWidth
                             variant="contained"
                             disableElevation
-                            startIcon={<GoogleIcon sx={{ position: "absolute", left: 16 }} />}
+                            startIcon={<GoogleIcon sx={socialIconSx} />}
                             sx={{
+                                ...baseSocialButtonSx,
                                 backgroundColor: SOCIAL_COLORS.google.main,
-                                color: "#fff",
-                                textTransform: "none",
-                                borderRadius: "50px",
-                                py: 1,
-                                position: "relative",
-                                justifyContent: "center",
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
                             }}
                         >
