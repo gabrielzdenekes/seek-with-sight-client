@@ -41,17 +41,6 @@ export default function RegisterPage() {
         e.preventDefault();
         setError(null);
 
-        // Basic front-end validation
-        if (!formData.email || !formData.password || !formData.confirmPassword) {
-            setError("Please fill in all required fields.");
-            return;
-        }
-
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match.");
-            return;
-        }
-
         setIsSubmitting(true);
 
         try {
