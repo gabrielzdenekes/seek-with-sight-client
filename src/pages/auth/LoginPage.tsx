@@ -17,6 +17,7 @@ import { SubmitButton } from "@/components/ui/SubmitButton";
 import { type LoginState } from "@/features/auth/schemas/login-schema";
 import { useActionState, useEffect } from "react";
 import { loginAction } from "@/features/auth/actions/login-action";
+import { useTranslation } from "react-i18next";
 import {
     SOCIAL_COLORS,
     authContainerSx,
@@ -33,6 +34,7 @@ const initialState: LoginState = {
 };
 
 export default function LoginPage() {
+    const { t } = useTranslation();
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -52,7 +54,7 @@ export default function LoginPage() {
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/logo.png"
-                    alt="SwS Logo"
+                    alt={t("common.logoAlt")}
                     style={{ width: "420px", objectFit: "contain" }}
                 />
             </Box>
@@ -60,11 +62,11 @@ export default function LoginPage() {
             <Card sx={authCardSx}>
                 <CardContent sx={{ p: 4, textAlign: "center" }}>
                     <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
-                        Hello!
+                        {t("login.title")}
                     </Typography>
 
                     <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 2 }}>
-                        Please enter your email address and password.
+                        {t("login.subtitle")}
                     </Typography>
 
                     {state.message && (
@@ -78,7 +80,7 @@ export default function LoginPage() {
                             fullWidth
                             variant="outlined"
                             size="small"
-                            label="Email"
+                            label={t("common.fields.email")}
                             name="email"
                             error={!!state.errors?.email}
                             helperText={state.errors?.email?.[0]}
@@ -90,29 +92,29 @@ export default function LoginPage() {
                             variant="outlined"
                             size="small"
                             type="password"
-                            label="Password"
+                            label={t("common.fields.password")}
                             name="password"
                             error={!!state.errors?.password}
                             helperText={state.errors?.password?.[0]}
                             sx={roundedInputSx}
                         />
 
-                        <SubmitButton label="Login" />
+                        <SubmitButton label={t("login.submit")} />
                     </Box>
 
                     <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
-                        Don't have an account? Don't worry!<br />
+                        {t("login.noAccountPrompt")}<br />
                         <Link component={RouterLink} to="/register" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                            Create account
+                            {t("login.createAccountLink")}
                         </Link>
                     </Typography>
 
                     <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
-                        or
+                        {t("common.or")}
                     </Divider>
 
                     <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
-                        use your social account
+                        {t("login.socialPrompt")}
                     </Typography>
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -127,7 +129,7 @@ export default function LoginPage() {
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
                             }}
                         >
-                            Facebook
+                            {t("common.social.facebook")}
                         </Button>
 
                         <Button
@@ -141,7 +143,7 @@ export default function LoginPage() {
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
                             }}
                         >
-                            Google
+                            {t("common.social.google")}
                         </Button>
                     </Box>
                 </CardContent>
