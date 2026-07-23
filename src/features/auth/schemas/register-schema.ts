@@ -3,18 +3,18 @@ import { z } from "zod";
 export const RegisterSchema = z
     .object({
         email: z
-            .email("Invalid email address"),
+            .email("register.validation.invalidEmail"),
 
         password: z
             .string()
-            .min(6, "Password must be at least 6 characters"),
+            .min(6, "register.validation.passwordMin"),
 
         confirmPassword: z
             .string()
-            .min(1, "Please confirm your password"),
+            .min(1, "register.validation.confirmPasswordRequired"),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
+        message: "register.validation.passwordsDoNotMatch",
         path: ["confirmPassword"],
     });
 

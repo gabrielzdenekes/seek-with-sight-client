@@ -84,7 +84,7 @@ export default function RegisterPage() {
                             name="email"
                             type="email"
                             error={!!state.errors?.email}
-                            helperText={state.errors?.email?.[0]}
+                            helperText={state.errors?.email?.[0] ? t(state.errors?.email?.[0]) : null}
                             sx={roundedInputSx}
                         />
 
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                             label={t("common.fields.password")}
                             name="password"
                             error={!!state.errors?.password}
-                            helperText={state.errors?.password?.[0]}
+                            helperText={state.errors?.password?.[0] ? t(state.errors?.password?.[0]) : null}
                             sx={roundedInputSx}
                         />
 
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                             label={t("common.fields.confirmPassword")}
                             name="confirmPassword"
                             error={!!state.errors?.confirmPassword}
-                            helperText={state.errors?.confirmPassword?.[0]}
+                            helperText={state.errors?.confirmPassword?.[0] ? t(state.errors?.confirmPassword?.[0]) : null}
                             sx={{ ...roundedInputSx, mb: 3 }}
                         />
 

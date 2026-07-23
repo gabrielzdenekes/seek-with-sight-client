@@ -18,7 +18,11 @@
         "submit": "Login",
         "noAccountPrompt": "Don't have an account? Don't worry!",
         "createAccountLink": "Create account",
-        "socialPrompt": "use your social account"
+        "socialPrompt": "use your social account",
+        "validation": {
+            "invalidEmail": "Invalid email address",
+            "passwordRequired": "Password is required"
+        }
     },
     "register": {
         "title": "Create Account",
@@ -26,6 +30,12 @@
         "submit": "Register",
         "hasAccountPrompt": "Already have an account?",
         "loginLink": "Log in here",
-        "socialPrompt": "sign up with your social account"
+        "socialPrompt": "sign up with your social account",
+        "validation": {
+            "invalidEmail": "Invalid email address",
+            "passwordMin": "Password must be at least 6 characters",
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordsDoNotMatch": "Passwords don't match"
+        }
     }
 }
