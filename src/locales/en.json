@@ -22,7 +22,8 @@
         "validation": {
             "invalidEmail": "Invalid email address",
             "passwordRequired": "Password is required"
-        }
+        },
+        "failed": "Login failed. Please try again."
     },
     "register": {
         "title": "Create Account",
@@ -36,6 +37,7 @@
             "passwordMin": "Password must be at least 6 characters",
             "confirmPasswordRequired": "Please confirm your password",
             "passwordsDoNotMatch": "Passwords don't match"
-        }
+        },
+        "failed": "Registration failed. Please try again."
     }
 }

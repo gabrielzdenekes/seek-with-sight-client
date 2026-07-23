@@ -71,7 +71,7 @@ export default function RegisterPage() {
 
                     {state.message && (
                         <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
-                            {state.message}
+                            {t(state.message)}
                         </Alert>
                     )}
 
