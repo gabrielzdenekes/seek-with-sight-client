@@ -30,6 +30,7 @@ export const AuthInterceptor = ({ children }: AxiosInterceptorProps) => {
                 if (!config.headers["Authorization"] && accessToken) {
                     config.headers["Authorization"] = `Bearer ${accessToken}`;
                 }
+
                 return config;
             },
             (error) => Promise.reject(error)
