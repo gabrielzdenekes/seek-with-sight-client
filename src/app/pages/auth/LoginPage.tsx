@@ -14,8 +14,9 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-import { LoginSchema, type LoginState } from "@/pages/auth/login-schema";
-import { useActionState } from "react";
+import { type LoginState } from "@/features/auth/schemas/login-schema";
+import { useActionState, useEffect } from "react";
+import { loginAction } from "@/features/auth/actions/login-action";
 
 const initialState: LoginState = {
     errors: {},
@@ -27,40 +28,17 @@ export default function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const loginAction = async (_: LoginState, formData: FormData): Promise<LoginState> => {
-        const rawData = Object.fromEntries(formData.entries());
+    const [state, formAction] = useActionState(
+        loginAction.bind(null, login),
+        initialState
+    );
 
-        const validated = LoginSchema.safeParse(rawData);
-
-        if (!validated.success) {
-            return {
-                errors: validated.error.flatten().fieldErrors,
-                message: null,
-                success: false
-            };
-        }
-
-        const loginData: any = formData;
-
-        try {
-            await login({
-                email: loginData.email,
-                password: loginData.password,
-            });
-
+    useEffect(() => {
+        if (state.success) {
             navigate("/");
-
-            return { success: true };
-        } catch (err: any) {
-            return {
-                errors: {},
-                message: err?.message || "Login failed. Please try again.",
-                success: false,
-            };
         }
-    };
 
-    const [state, formAction] = useActionState(loginAction, initialState);
+    }, [state.success, navigate]);
 
     return (
         <Box
