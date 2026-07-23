@@ -7,57 +7,60 @@ import {
     Button,
     Divider,
     Link,
-    Alert,
-    CircularProgress
+    Alert
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SubmitButton } from "@/components/ui/SubmitButton";
+import { LoginSchema, type LoginState } from "@/pages/auth/login-schema";
+import { useActionState } from "react";
+
+const initialState: LoginState = {
+    errors: {},
+    message: null,
+    success: false,
+};
 
 export default function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
-    });
+    const loginAction = async (_: LoginState, formData: FormData): Promise<LoginState> => {
+        const rawData = Object.fromEntries(formData.entries());
 
-    const [error, setError] = useState<string | null>(null);
+        const validated = LoginSchema.safeParse(rawData);
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+        if (!validated.success) {
+            return {
+                errors: validated.error.flatten().fieldErrors,
+                message: null,
+                success: false
+            };
+        }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-
-        setIsSubmitting(true);
+        const loginData: any = formData;
 
         try {
-            // Call the register function from AuthContext
             await login({
-                email: formData.email,
-                password: formData.password,
+                email: loginData.email,
+                password: loginData.password,
             });
 
-            // Redirect to login page on success
             navigate("/");
+
+            return { success: true };
         } catch (err: any) {
-            // Display backend error message if available
-            setError(err?.message || "Login failed. Please try again.");
-        } finally {
-            setIsSubmitting(false);
+            return {
+                errors: {},
+                message: err?.message || "Login failed. Please try again.",
+                success: false,
+            };
         }
     };
+
+    const [state, formAction] = useActionState(loginAction, initialState);
 
     return (
         <Box
@@ -71,7 +74,6 @@ export default function LoginPage() {
                 padding: 2,
             }}
         >
-            {/* Logo */}
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/src/assets/logo.png"
@@ -80,7 +82,6 @@ export default function LoginPage() {
                 />
             </Box>
 
-            {/* Main Login Card */}
             <Card
                 sx={{
                     width: "100%",
@@ -105,14 +106,13 @@ export default function LoginPage() {
                         Please enter your email address and password.
                     </Typography>
 
-                    {/* Display error alert if any error exists */}
-                    {error && (
+                    {state.message && (
                         <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
-                            {error}
+                            {state.message}
                         </Alert>
                     )}
 
-                    <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <Box component="form" action={formAction} noValidate>
 
                         <TextField
                             fullWidth
@@ -120,7 +120,8 @@ export default function LoginPage() {
                             size="small"
                             label="Email"
                             name="email"
-                            onChange={handleChange}
+                            error={!!state.errors?.email}
+                            helperText={state.errors?.email?.[0]}
                             sx={{
                                 mb: 2,
                                 "& .MuiOutlinedInput-root": {
@@ -136,7 +137,8 @@ export default function LoginPage() {
                             type="password"
                             label="Password"
                             name="password"
-                            onChange={handleChange}
+                            error={!!state.errors?.password}
+                            helperText={state.errors?.password?.[0]}
                             sx={{
                                 mb: 2,
                                 "& .MuiOutlinedInput-root": {
@@ -145,31 +147,7 @@ export default function LoginPage() {
                             }}
                         />
 
-                        <Button
-                            fullWidth
-                            type="submit"
-                            variant="contained"
-                            disableElevation
-                            disabled={isSubmitting}
-                            sx={{
-                                backgroundColor: "#333",
-                                color: "#fff",
-                                textTransform: "none",
-                                borderRadius: "50px",
-                                py: 1,
-                                mb: 3,
-                                fontSize: "16px",
-                                "&:hover": {
-                                    backgroundColor: "#aaa",
-                                },
-                            }}
-                        >
-                            {isSubmitting ? (
-                                <CircularProgress size={24} sx={{ color: "#fff" }} />
-                            ) : (
-                                "Login"
-                            )}
-                        </Button>
+                        <SubmitButton label="Login" />
                     </Box>
 
                     <Typography variant="body2" sx={{ color: "#333", fontSize: "13px", mb: 4, px: 2 }}>
@@ -187,7 +165,6 @@ export default function LoginPage() {
                         use your social account
                     </Typography>
 
-                    {/* Social Buttons */}
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                         <Button
                             fullWidth
