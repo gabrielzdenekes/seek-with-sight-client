@@ -54,7 +54,7 @@ export default function LoginPage() {
         >
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
-                    src="/src/assets/logo.png"
+                    src="/logo.png"
                     alt="SwS Logo"
                     style={{ width: "420px", objectFit: "contain" }}
                 />
