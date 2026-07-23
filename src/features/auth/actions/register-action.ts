@@ -25,10 +25,10 @@ export const registerAction = async (
         });
 
         return { success: true };
-    } catch (err: any) {
+    } catch {
         return {
             errors: {},
-            message: err?.message || "Registration failed. Please try again.",
+            message: "register.validation.failed",
             success: false,
         };
     }

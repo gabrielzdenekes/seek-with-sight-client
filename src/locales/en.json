@@ -1,0 +1,43 @@
+{
+    "common": {
+        "logoAlt": "SwS Logo",
+        "or": "or",
+        "fields": {
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password"
+        },
+        "social": {
+            "facebook": "Facebook",
+            "google": "Google"
+        }
+    },
+    "login": {
+        "title": "Hello!",
+        "subtitle": "Please enter your email address and password.",
+        "submit": "Login",
+        "noAccountPrompt": "Don't have an account? Don't worry!",
+        "createAccountLink": "Create account",
+        "socialPrompt": "use your social account",
+        "validation": {
+            "invalidEmail": "Invalid email address",
+            "passwordRequired": "Password is required"
+        },
+        "failed": "Login failed. Please try again."
+    },
+    "register": {
+        "title": "Create Account",
+        "subtitle": "Please fill in the details below to sign up.",
+        "submit": "Register",
+        "hasAccountPrompt": "Already have an account?",
+        "loginLink": "Log in here",
+        "socialPrompt": "sign up with your social account",
+        "validation": {
+            "invalidEmail": "Invalid email address",
+            "passwordMin": "Password must be at least 6 characters",
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordsDoNotMatch": "Passwords don't match"
+        },
+        "failed": "Registration failed. Please try again."
+    }
+}

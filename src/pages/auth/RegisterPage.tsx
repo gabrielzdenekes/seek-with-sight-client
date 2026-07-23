@@ -14,9 +14,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-import { type LoginState } from "@/features/auth/schemas/login-schema";
+import { type RegisterState } from "@/features/auth/schemas/register-schema";
 import { useActionState, useEffect } from "react";
-import { loginAction } from "@/features/auth/actions/login-action";
+import { registerAction } from "@/features/auth/actions/register-action";
+import { useTranslation } from "react-i18next";
 import {
     SOCIAL_COLORS,
     authContainerSx,
@@ -24,26 +25,27 @@ import {
     roundedInputSx,
     baseSocialButtonSx,
     socialIconSx
-} from "@/pages/auth/styles";
+} from "./styles";
 
-const initialState: LoginState = {
+const initialState: RegisterState = {
     errors: {},
     message: null,
     success: false,
 };
 
-export default function LoginPage() {
-    const { login } = useAuth();
+export default function RegisterPage() {
+    const { t } = useTranslation();
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     const [state, formAction] = useActionState(
-        loginAction.bind(null, login),
+        registerAction.bind(null, register),
         initialState
     );
 
     useEffect(() => {
         if (state.success) {
-            navigate("/");
+            navigate("/login");
         }
     }, [state.success, navigate]);
 
@@ -52,7 +54,7 @@ export default function LoginPage() {
             <Box sx={{ mb: 0, height: 120 }}>
                 <img
                     src="/logo.png"
-                    alt="SwS Logo"
+                    alt={t("common.logoAlt")}
                     style={{ width: "420px", objectFit: "contain" }}
                 />
             </Box>
@@ -60,16 +62,16 @@ export default function LoginPage() {
             <Card sx={authCardSx}>
                 <CardContent sx={{ p: 4, textAlign: "center" }}>
                     <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
-                        Hello!
+                        {t("register.title")}
                     </Typography>
 
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 2 }}>
-                        Please enter your email address and password.
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}>
+                        {t("register.subtitle")}
                     </Typography>
 
                     {state.message && (
                         <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
-                            {state.message}
+                            {t(state.message)}
                         </Alert>
                     )}
 
@@ -78,10 +80,11 @@ export default function LoginPage() {
                             fullWidth
                             variant="outlined"
                             size="small"
-                            label="Email"
+                            label={t("common.fields.email")}
                             name="email"
+                            type="email"
                             error={!!state.errors?.email}
-                            helperText={state.errors?.email?.[0]}
+                            helperText={state.errors?.email?.[0] ? t(state.errors?.email?.[0]) : null}
                             sx={roundedInputSx}
                         />
 
@@ -90,29 +93,42 @@ export default function LoginPage() {
                             variant="outlined"
                             size="small"
                             type="password"
-                            label="Password"
+                            label={t("common.fields.password")}
                             name="password"
                             error={!!state.errors?.password}
-                            helperText={state.errors?.password?.[0]}
+                            helperText={state.errors?.password?.[0] ? t(state.errors?.password?.[0]) : null}
                             sx={roundedInputSx}
                         />
 
-                        <SubmitButton label="Login" />
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            type="password"
+                            label={t("common.fields.confirmPassword")}
+                            name="confirmPassword"
+                            error={!!state.errors?.confirmPassword}
+                            helperText={state.errors?.confirmPassword?.[0] ? t(state.errors?.confirmPassword?.[0]) : null}
+                            sx={{ ...roundedInputSx, mb: 3 }}
+                        />
+
+                        <SubmitButton label={t("register.submit")} />
                     </Box>
 
                     <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
-                        Don't have an account? Don't worry!<br />
-                        <Link component={RouterLink} to="/register" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                            Create account
+                        {t("register.hasAccountPrompt")}{" "}
+                        <br />
+                        <Link component={RouterLink} to="/login" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                            {t("register.loginLink")}
                         </Link>
                     </Typography>
 
                     <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
-                        or
+                        {t("common.or")}
                     </Divider>
 
                     <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
-                        use your social account
+                        {t("register.socialPrompt")}
                     </Typography>
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -127,7 +143,7 @@ export default function LoginPage() {
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
                             }}
                         >
-                            Facebook
+                            {t("common.social.facebook")}
                         </Button>
 
                         <Button
@@ -141,7 +157,7 @@ export default function LoginPage() {
                                 "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
                             }}
                         >
-                            Google
+                            {t("common.social.google")}
                         </Button>
                     </Box>
                 </CardContent>

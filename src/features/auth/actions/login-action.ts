@@ -19,10 +19,10 @@ export const loginAction = async (loginFn: AuthContextType["login"], _: LoginSta
         await loginFn(validated.data);
 
         return { success: true };
-    } catch (err: any) {
+    } catch {
         return {
             errors: {},
-            message: err?.message || "Login failed. Please try again.",
+            message: "login.validation.failed",
             success: false,
         };
     }
