@@ -33,6 +33,26 @@ const initialState: LoginState = {
     success: false,
 };
 
+const LOGIN_FIELDS = [
+    { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
+    { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "current-password" },
+] as const;
+
+const SOCIAL_PROVIDERS = [
+    {
+        key: "facebook",
+        labelKey: "common.social.facebook",
+        Icon: FacebookIcon,
+        color: SOCIAL_COLORS.facebook,
+    },
+    {
+        key: "google",
+        labelKey: "common.social.google",
+        Icon: GoogleIcon,
+        color: SOCIAL_COLORS.google,
+    },
+] as const;
+
 export default function LoginPage() {
     const { t } = useTranslation();
     const { login } = useAuth();
@@ -51,16 +71,22 @@ export default function LoginPage() {
 
     return (
         <Box sx={authContainerSx}>
-            <Box sx={{ mb: 0, height: 120 }}>
-                <img
-                    src="/logo.png"
-                    alt={t("common.logoAlt")}
-                    style={{ width: "420px", objectFit: "contain" }}
-                />
-            </Box>
+            {/* Responsive Logo Container */}
+            <Box
+                component="img"
+                src="/logo.png"
+                alt={t("common.logoAlt")}
+                sx={{
+                    width: "100%",
+                    maxWidth: 420,
+                    height: 120,
+                    objectFit: "contain",
+                    mb: 2,
+                }}
+            />
 
             <Card sx={authCardSx}>
-                <CardContent sx={{ p: 4, textAlign: "center" }}>
+                <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
                     <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
                         {t("login.title")}
                     </Typography>
@@ -70,81 +96,75 @@ export default function LoginPage() {
                     </Typography>
 
                     {state.message && (
-                        <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
+                        <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
                             {t(state.message)}
                         </Alert>
                     )}
 
                     <Box component="form" action={formAction} noValidate>
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            label={t("common.fields.email")}
-                            name="email"
-                            error={!!state.errors?.email}
-                            helperText={state.errors?.email?.[0] ? t(state.errors?.email?.[0]) : null}
-                            sx={roundedInputSx}
-                        />
+                        {LOGIN_FIELDS.map((field) => {
+                            const fieldError = state.errors?.[field.name as keyof typeof state.errors]?.[0];
 
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="password"
-                            label={t("common.fields.password")}
-                            name="password"
-                            error={!!state.errors?.password}
-                            helperText={state.errors?.password?.[0] ? t(state.errors?.password?.[0]) : null}
-                            sx={roundedInputSx}
-                        />
+                            return (
+                                <TextField
+                                    key={field.name}
+                                    id={`login-${field.name}`}
+                                    name={field.name}
+                                    type={field.type}
+                                    label={t(field.labelKey)}
+                                    autoComplete={field.autoComplete}
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    error={!!fieldError}
+                                    helperText={fieldError ? t(fieldError) : null}
+                                    sx={roundedInputSx}
+                                />
+                            );
+                        })}
 
                         <SubmitButton label={t("login.submit")} />
                     </Box>
 
-                    <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
-                        {t("login.noAccountPrompt")}<br />
-                        <Link component={RouterLink} to="/register/customer" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                    <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                        <Typography variant="body2" sx={{ color: "text.primary" }}>
+                            {t("login.noAccountPrompt")}
+                        </Typography>
+                        <Link
+                            component={RouterLink}
+                            to="/register/customer"
+                            underline="hover"
+                            sx={{ color: "primary.main", fontWeight: 500 }}
+                        >
                             {t("login.createAccountLink")}
                         </Link>
-                    </Typography>
+                    </Box>
 
-                    <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
+                    <Divider sx={{ mb: 1, color: "text.secondary" }}>
                         {t("common.or")}
                     </Divider>
 
-                    <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
+                    <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
                         {t("login.socialPrompt")}
                     </Typography>
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            disableElevation
-                            startIcon={<FacebookIcon sx={socialIconSx} />}
-                            sx={{
-                                ...baseSocialButtonSx,
-                                backgroundColor: SOCIAL_COLORS.facebook.main,
-                                "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
-                            }}
-                        >
-                            {t("common.social.facebook")}
-                        </Button>
-
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            disableElevation
-                            startIcon={<GoogleIcon sx={socialIconSx} />}
-                            sx={{
-                                ...baseSocialButtonSx,
-                                backgroundColor: SOCIAL_COLORS.google.main,
-                                "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
-                            }}
-                        >
-                            {t("common.social.google")}
-                        </Button>
+                        {SOCIAL_PROVIDERS.map(({ key, labelKey, Icon, color }) => (
+                            <Button
+                                key={key}
+                                fullWidth
+                                variant="contained"
+                                disableElevation
+                                startIcon={<Icon sx={socialIconSx} />}
+                                sx={{
+                                    ...baseSocialButtonSx,
+                                    backgroundColor: color.main,
+                                    "&:hover": { backgroundColor: color.hover },
+                                }}
+                            >
+                                {t(labelKey)}
+                            </Button>
+                        ))}
                     </Box>
                 </CardContent>
             </Card>
