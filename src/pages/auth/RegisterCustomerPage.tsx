@@ -14,8 +14,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
+// Ensure you have a specific schema/type for Customer registration
 import { type RegisterCustomerState } from "@/features/auth/schemas/register-customer-schema";
 import { useActionState, useEffect } from "react";
+// Ensure you have a specific action for Customer registration
 import { registerCustomerAction } from "@/features/auth/actions/register-customer-action";
 import { useTranslation } from "react-i18next";
 import {
@@ -33,7 +35,7 @@ const initialState: RegisterCustomerState = {
     success: false,
 };
 
-export default function RegisterPage() {
+export default function RegisterCustomerPage() {
     const { t } = useTranslation();
     const { register } = useAuth();
     const navigate = useNavigate();
@@ -62,7 +64,7 @@ export default function RegisterPage() {
             <Card sx={authCardSx}>
                 <CardContent sx={{ p: 4, textAlign: "center" }}>
                     <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
-                        {t("register.title")}
+                        {t("register.customer.title", "Create Customer Account")}
                     </Typography>
 
                     <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}>
@@ -76,6 +78,40 @@ export default function RegisterPage() {
                     )}
 
                     <Box component="form" action={formAction} noValidate>
+                        <Box sx={{ display: "flex", gap: 2 }}>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                label={t("common.fields.firstName")}
+                                name="firstName"
+                                error={!!state.errors?.firstName}
+                                helperText={state.errors?.firstName?.[0] ? t(state.errors?.firstName?.[0]) : null}
+                                sx={roundedInputSx}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                label={t("common.fields.lastName")}
+                                name="lastName"
+                                error={!!state.errors?.lastName}
+                                helperText={state.errors?.lastName?.[0] ? t(state.errors?.lastName?.[0]) : null}
+                                sx={roundedInputSx}
+                            />
+                        </Box>
+
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            label={t("common.fields.phone")}
+                            name="phone"
+                            error={!!state.errors?.phone}
+                            helperText={state.errors?.phone?.[0] ? t(state.errors?.phone?.[0]) : null}
+                            sx={roundedInputSx}
+                        />
+
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -115,11 +151,17 @@ export default function RegisterPage() {
                         <SubmitButton label={t("register.submit")} />
                     </Box>
 
-                    <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
+                    <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 2, mt: 2, px: 2 }}>
                         {t("register.hasAccountPrompt")}{" "}
-                        <br />
                         <Link component={RouterLink} to="/login" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
                             {t("register.loginLink")}
+                        </Link>
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
+                        {t("register.customer.sellerPrompt", "Want to sell on our platform?")}{" "}
+                        <Link component={RouterLink} to="/register/seller" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                            {t("register.customer.sellerLink", "Register as a Seller")}
                         </Link>
                     </Typography>
 

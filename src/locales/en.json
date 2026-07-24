@@ -5,7 +5,13 @@
         "fields": {
             "email": "Email",
             "password": "Password",
-            "confirmPassword": "Confirm Password"
+            "confirmPassword": "Confirm Password",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "phone": "Phone",
+            "businessName": "Business Name",
+            "businessAddress": "Business Address",
+            "taxId": "Tax ID"
         },
         "social": {
             "facebook": "Facebook",
@@ -36,8 +42,21 @@
             "invalidEmail": "Invalid email address",
             "passwordMin": "Password must be at least 6 characters",
             "confirmPasswordRequired": "Please confirm your password",
-            "passwordsDoNotMatch": "Passwords don't match"
+            "passwordsDoNotMatch": "Passwords don't match",
+            "firstNameRequired": "First name is required",
+            "lastNameRequired": "Last name is required"
         },
-        "failed": "Registration failed. Please try again."
+        "failed": "Registration failed. Please try again.",
+        "customer": {
+            "title": "Create Customer Account",
+            "sellerPrompt": "Want to sell on our platform?",
+            "sellerLink": "Register as a Seller"
+        },
+        "seller": {
+            "title": "Create Seller Account",
+            "subtitle": "Partner with us and start selling",
+            "customerPrompt": "Looking to buy instead?",
+            "customerLink": "Register as a Customer"
+        }
     }
 }
