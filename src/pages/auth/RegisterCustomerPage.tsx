@@ -34,6 +34,40 @@ const initialState: RegisterCustomerState = {
     success: false,
 };
 
+const REGISTER_FIELD_ROWS = [
+    [
+        { name: "firstName", labelKey: "common.fields.firstName", type: "text", autoComplete: "given-name" },
+        { name: "lastName", labelKey: "common.fields.lastName", type: "text", autoComplete: "family-name" },
+    ],
+    [
+        { name: "phone", labelKey: "common.fields.phone", type: "tel", autoComplete: "tel" },
+    ],
+    [
+        { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
+    ],
+    [
+        { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "new-password" },
+    ],
+    [
+        { name: "confirmPassword", labelKey: "common.fields.confirmPassword", type: "password", autoComplete: "new-password" },
+    ],
+] as const;
+
+const SOCIAL_PROVIDERS = [
+    {
+        key: "facebook",
+        labelKey: "common.social.facebook",
+        Icon: FacebookIcon,
+        color: SOCIAL_COLORS.facebook,
+    },
+    {
+        key: "google",
+        labelKey: "common.social.google",
+        Icon: GoogleIcon,
+        color: SOCIAL_COLORS.google,
+    },
+] as const;
+
 export default function RegisterCustomerPage() {
     const { t } = useTranslation();
     const { registerCustomer } = useAuth();
@@ -45,16 +79,22 @@ export default function RegisterCustomerPage() {
 
     return (
         <Box sx={authContainerSx}>
-            <Box sx={{ mb: 0, height: 120 }}>
-                <img
-                    src="/logo.png"
-                    alt={t("common.logoAlt")}
-                    style={{ width: "420px", objectFit: "contain" }}
-                />
-            </Box>
+            {/* Responsive Logo Container */}
+            <Box
+                component="img"
+                src="/logo.png"
+                alt={t("common.logoAlt")}
+                sx={{
+                    width: "100%",
+                    maxWidth: 420,
+                    height: 120,
+                    objectFit: "contain",
+                    mb: 2,
+                }}
+            />
 
             <Card sx={authCardSx}>
-                <CardContent sx={{ p: 4, textAlign: "center" }}>
+                <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
                     {state.success ? (
                         <Box sx={{ py: 3, display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
@@ -63,7 +103,7 @@ export default function RegisterCustomerPage() {
                                 {t("register.successTitle")}
                             </Typography>
 
-                            <Alert severity="success" sx={{ mb: 4, borderRadius: "8px", textAlign: "left" }}>
+                            <Alert severity="success" sx={{ mb: 4, borderRadius: 2, textAlign: "left" }}>
                                 {t("register.customer.verifyEmailMessage")}
                             </Alert>
 
@@ -73,7 +113,7 @@ export default function RegisterCustomerPage() {
                                 variant="contained"
                                 fullWidth
                                 disableElevation
-                                sx={{ py: 1.2, borderRadius: "8px" }}
+                                sx={{ py: 1.2, borderRadius: 2 }}
                             >
                                 {t("register.customer.goToLogin")}
                             </Button>
@@ -89,135 +129,102 @@ export default function RegisterCustomerPage() {
                             </Typography>
 
                             {state.message && (
-                                <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
+                                <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
                                     {t(state.message)}
                                 </Alert>
                             )}
 
                             <Box component="form" action={formAction} noValidate>
-                                <Box sx={{ display: "flex", gap: 2 }}>
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        size="small"
-                                        label={t("common.fields.firstName")}
-                                        name="firstName"
-                                        error={!!state.errors?.firstName}
-                                        helperText={state.errors?.firstName?.[0] ? t(state.errors?.firstName?.[0]) : null}
-                                        sx={roundedInputSx}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        size="small"
-                                        label={t("common.fields.lastName")}
-                                        name="lastName"
-                                        error={!!state.errors?.lastName}
-                                        helperText={state.errors?.lastName?.[0] ? t(state.errors?.lastName?.[0]) : null}
-                                        sx={roundedInputSx}
-                                    />
-                                </Box>
+                                {REGISTER_FIELD_ROWS.map((row, rowIndex) => {
+                                    const isLastRow = rowIndex === REGISTER_FIELD_ROWS.length - 1;
 
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.phone")}
-                                    name="phone"
-                                    error={!!state.errors?.phone}
-                                    helperText={state.errors?.phone?.[0] ? t(state.errors?.phone?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
+                                    return (
+                                        <Box
+                                            key={rowIndex}
+                                            sx={{
+                                                display: "flex",
+                                                gap: 2,
+                                                ...(isLastRow ? { mb: 3 } : {}),
+                                            }}
+                                        >
+                                            {row.map((field) => {
+                                                const fieldError = state.errors?.[field.name as keyof typeof state.errors]?.[0];
 
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.email")}
-                                    name="email"
-                                    type="email"
-                                    error={!!state.errors?.email}
-                                    helperText={state.errors?.email?.[0] ? t(state.errors?.email?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    type="password"
-                                    label={t("common.fields.password")}
-                                    name="password"
-                                    error={!!state.errors?.password}
-                                    helperText={state.errors?.password?.[0] ? t(state.errors?.password?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    type="password"
-                                    label={t("common.fields.confirmPassword")}
-                                    name="confirmPassword"
-                                    error={!!state.errors?.confirmPassword}
-                                    helperText={state.errors?.confirmPassword?.[0] ? t(state.errors?.confirmPassword?.[0]) : null}
-                                    sx={{ ...roundedInputSx, mb: 3 }}
-                                />
+                                                return (
+                                                    <TextField
+                                                        key={field.name}
+                                                        id={`register-${field.name}`}
+                                                        name={field.name}
+                                                        type={field.type}
+                                                        label={t(field.labelKey)}
+                                                        autoComplete={field.autoComplete}
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        size="small"
+                                                        error={!!fieldError}
+                                                        helperText={fieldError ? t(fieldError) : null}
+                                                        sx={roundedInputSx}
+                                                    />
+                                                );
+                                            })}
+                                        </Box>
+                                    );
+                                })}
 
                                 <SubmitButton label={t("register.submit")} />
                             </Box>
 
-                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 2, mt: 2, px: 2 }}>
-                                {t("register.hasAccountPrompt")}{" "}
-                                <Link component={RouterLink} to="/login" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                                    {t("register.loginLink")}
-                                </Link>
-                            </Typography>
+                            <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+                                <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                    {t("register.hasAccountPrompt")}{" "}
+                                    <Link
+                                        component={RouterLink}
+                                        to="/login"
+                                        underline="hover"
+                                        sx={{ color: "primary.main", fontWeight: 500 }}
+                                    >
+                                        {t("register.loginLink")}
+                                    </Link>
+                                </Typography>
 
-                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
-                                {t("register.customer.sellerPrompt")}{" "}
-                                <Link component={RouterLink} to="/register/seller" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                                    {t("register.customer.sellerLink")}
-                                </Link>
-                            </Typography>
+                                <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                    {t("register.customer.sellerPrompt")}{" "}
+                                    <Link
+                                        component={RouterLink}
+                                        to="/register/seller"
+                                        underline="hover"
+                                        sx={{ color: "primary.main", fontWeight: 500 }}
+                                    >
+                                        {t("register.customer.sellerLink")}
+                                    </Link>
+                                </Typography>
+                            </Box>
 
-                            <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
+                            <Divider sx={{ mb: 1, color: "text.secondary" }}>
                                 {t("common.or")}
                             </Divider>
 
-                            <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
+                            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
                                 {t("register.socialPrompt")}
                             </Typography>
 
                             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    disableElevation
-                                    startIcon={<FacebookIcon sx={socialIconSx} />}
-                                    sx={{
-                                        ...baseSocialButtonSx,
-                                        backgroundColor: SOCIAL_COLORS.facebook.main,
-                                        "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
-                                    }}
-                                >
-                                    {t("common.social.facebook")}
-                                </Button>
-
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    disableElevation
-                                    startIcon={<GoogleIcon sx={socialIconSx} />}
-                                    sx={{
-                                        ...baseSocialButtonSx,
-                                        backgroundColor: SOCIAL_COLORS.google.main,
-                                        "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
-                                    }}
-                                >
-                                    {t("common.social.google")}
-                                </Button>
+                                {SOCIAL_PROVIDERS.map(({ key, labelKey, Icon, color }) => (
+                                    <Button
+                                        key={key}
+                                        fullWidth
+                                        variant="contained"
+                                        disableElevation
+                                        startIcon={<Icon sx={socialIconSx} />}
+                                        sx={{
+                                            ...baseSocialButtonSx,
+                                            backgroundColor: color.main,
+                                            "&:hover": { backgroundColor: color.hover },
+                                        }}
+                                    >
+                                        {t(labelKey)}
+                                    </Button>
+                                ))}
                             </Box>
                         </>
                     )}
