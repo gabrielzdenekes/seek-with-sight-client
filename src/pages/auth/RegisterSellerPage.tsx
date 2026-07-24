@@ -4,42 +4,36 @@ import {
     CardContent,
     Typography,
     TextField,
-    Button,
-    Divider,
     Link,
-    Alert
+    Alert,
+    Button
 } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-import { type RegisterCustomerState } from "@/features/auth/schemas/register-customer-schema";
+import { type RegisterSellerState } from "@/features/auth/schemas/register-seller-schema";
 import { useActionState } from "react";
-import { registerCustomerAction } from "@/features/auth/actions/register-customer-action";
+import { registerSellerAction } from "@/features/auth/actions/register-seller-action";
 import { useTranslation } from "react-i18next";
 import {
-    SOCIAL_COLORS,
     authContainerSx,
     authCardSx,
-    roundedInputSx,
-    baseSocialButtonSx,
-    socialIconSx
+    roundedInputSx
 } from "./styles";
 
-const initialState: RegisterCustomerState = {
+const initialState: RegisterSellerState = {
     errors: {},
     message: null,
     success: false,
 };
 
-export default function RegisterCustomerPage() {
+export default function RegisterSellerPage() {
     const { t } = useTranslation();
-    const { registerCustomer } = useAuth();
+    const { registerSeller } = useAuth();
 
     const [state, formAction] = useActionState(
-        registerCustomerAction.bind(null, registerCustomer),
+        registerSellerAction.bind(null, registerSeller),
         initialState
     );
 
@@ -64,7 +58,7 @@ export default function RegisterCustomerPage() {
                             </Typography>
 
                             <Alert severity="success" sx={{ mb: 4, borderRadius: "8px", textAlign: "left" }}>
-                                {t("register.customer.verifyEmailMessage")}
+                                {t("register.seller.verifyEmailMessage")}
                             </Alert>
 
                             <Button
@@ -75,17 +69,17 @@ export default function RegisterCustomerPage() {
                                 disableElevation
                                 sx={{ py: 1.2, borderRadius: "8px" }}
                             >
-                                {t("register.customer.goToLogin")}
+                                {t("register.seller.goToLogin")}
                             </Button>
                         </Box>
                     ) : (
                         <>
                             <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
-                                {t("register.customer.title")}
+                                {t("register.seller.title")}
                             </Typography>
 
                             <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}>
-                                {t("register.subtitle")}
+                                {t("register.seller.subtitle")}
                             </Typography>
 
                             {state.message && (
@@ -95,37 +89,36 @@ export default function RegisterCustomerPage() {
                             )}
 
                             <Box component="form" action={formAction} noValidate>
-                                <Box sx={{ display: "flex", gap: 2 }}>
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        size="small"
-                                        label={t("common.fields.firstName")}
-                                        name="firstName"
-                                        error={!!state.errors?.firstName}
-                                        helperText={state.errors?.firstName?.[0] ? t(state.errors?.firstName?.[0]) : null}
-                                        sx={roundedInputSx}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        size="small"
-                                        label={t("common.fields.lastName")}
-                                        name="lastName"
-                                        error={!!state.errors?.lastName}
-                                        helperText={state.errors?.lastName?.[0] ? t(state.errors?.lastName?.[0]) : null}
-                                        sx={roundedInputSx}
-                                    />
-                                </Box>
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    label={t("common.fields.businessName")}
+                                    name="businessName"
+                                    error={!!state.errors?.businessName}
+                                    helperText={state.errors?.businessName?.[0] ? t(state.errors?.businessName?.[0]) : null}
+                                    sx={roundedInputSx}
+                                />
 
                                 <TextField
                                     fullWidth
                                     variant="outlined"
                                     size="small"
-                                    label={t("common.fields.phone")}
-                                    name="phone"
-                                    error={!!state.errors?.phone}
-                                    helperText={state.errors?.phone?.[0] ? t(state.errors?.phone?.[0]) : null}
+                                    label={t("common.fields.businessAddress")}
+                                    name="businessAddress"
+                                    error={!!state.errors?.businessAddress}
+                                    helperText={state.errors?.businessAddress?.[0] ? t(state.errors?.businessAddress?.[0]) : null}
+                                    sx={roundedInputSx}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    label={t("common.fields.taxId")}
+                                    name="taxId"
+                                    error={!!state.errors?.taxId}
+                                    helperText={state.errors?.taxId?.[0] ? t(state.errors?.taxId?.[0]) : null}
                                     sx={roundedInputSx}
                                 />
 
@@ -175,50 +168,12 @@ export default function RegisterCustomerPage() {
                                 </Link>
                             </Typography>
 
-                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
-                                {t("register.customer.sellerPrompt")}{" "}
-                                <Link component={RouterLink} to="/register/seller" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                                    {t("register.customer.sellerLink")}
+                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 2, px: 2 }}>
+                                {t("register.seller.customerPrompt")}{" "}
+                                <Link component={RouterLink} to="/register/customer" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                                    {t("register.seller.customerLink")}
                                 </Link>
                             </Typography>
-
-                            <Divider sx={{ mb: 1, color: "text.secondary", fontSize: "14px" }}>
-                                {t("common.or")}
-                            </Divider>
-
-                            <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "13px", mb: 3 }}>
-                                {t("register.socialPrompt")}
-                            </Typography>
-
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    disableElevation
-                                    startIcon={<FacebookIcon sx={socialIconSx} />}
-                                    sx={{
-                                        ...baseSocialButtonSx,
-                                        backgroundColor: SOCIAL_COLORS.facebook.main,
-                                        "&:hover": { backgroundColor: SOCIAL_COLORS.facebook.hover },
-                                    }}
-                                >
-                                    {t("common.social.facebook")}
-                                </Button>
-
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    disableElevation
-                                    startIcon={<GoogleIcon sx={socialIconSx} />}
-                                    sx={{
-                                        ...baseSocialButtonSx,
-                                        backgroundColor: SOCIAL_COLORS.google.main,
-                                        "&:hover": { backgroundColor: SOCIAL_COLORS.google.hover },
-                                    }}
-                                >
-                                    {t("common.social.google")}
-                                </Button>
-                            </Box>
                         </>
                     )}
                 </CardContent>

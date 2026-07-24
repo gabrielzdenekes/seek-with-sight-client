@@ -18,6 +18,18 @@ export interface CustomerProfileResponse {
     user: User;
 }
 
+export interface SellerProfileResponse {
+    id: string;
+
+    businessName: string;
+
+    businessAddress: string;
+
+    taxId: string;
+
+    user: User;
+}
+
 export interface LoginCredentials {
     email: string;
 
@@ -34,6 +46,18 @@ export interface RegisterCustomerData {
     lastName: string;
 
     phone: string;
+}
+
+export interface RegisterSellerData {
+    businessName: string;
+
+    businessAddress: string;
+
+    taxId: string;
+
+    email: string;
+
+    password: string;
 }
 
 export interface AuthResponse {
@@ -54,6 +78,8 @@ export interface AuthContextType {
     login: (credentials: LoginCredentials) => Promise<AuthResponse | undefined>;
 
     registerCustomer: (data: RegisterCustomerData) => Promise<CustomerProfileResponse | undefined>;
+
+    registerSeller: (data: RegisterSellerData) => Promise<SellerProfileResponse | undefined>;
 
     logout: () => Promise<void>;
 

@@ -104,7 +104,7 @@ export default function LoginPage() {
 
                     <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 4, px: 2 }}>
                         {t("login.noAccountPrompt")}<br />
-                        <Link component={RouterLink} to="/register" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
+                        <Link component={RouterLink} to="/register/customer" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
                             {t("login.createAccountLink")}
                         </Link>
                     </Typography>
