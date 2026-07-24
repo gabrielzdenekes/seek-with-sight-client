@@ -44,9 +44,9 @@
             "confirmPasswordRequired": "Please confirm your password",
             "passwordsDoNotMatch": "Passwords don't match",
             "firstNameRequired": "First name is required",
-            "lastNameRequired": "Last name is required"
+            "lastNameRequired": "Last name is required",
+            "failed": "Registration failed. Please try again."
         },
-        "failed": "Registration failed. Please try again.",
         "customer": {
             "title": "Create Customer Account",
             "sellerPrompt": "Want to sell on our platform?",

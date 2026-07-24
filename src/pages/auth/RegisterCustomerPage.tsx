@@ -14,10 +14,8 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-// Ensure you have a specific schema/type for Customer registration
 import { type RegisterCustomerState } from "@/features/auth/schemas/register-customer-schema";
 import { useActionState, useEffect } from "react";
-// Ensure you have a specific action for Customer registration
 import { registerCustomerAction } from "@/features/auth/actions/register-customer-action";
 import { useTranslation } from "react-i18next";
 import {
@@ -37,7 +35,7 @@ const initialState: RegisterCustomerState = {
 
 export default function RegisterCustomerPage() {
     const { t } = useTranslation();
-    const { register } = useAuth();
+    const { registerCustomer: register } = useAuth();
     const navigate = useNavigate();
 
     const [state, formAction] = useActionState(

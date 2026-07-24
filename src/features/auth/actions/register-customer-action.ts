@@ -2,7 +2,7 @@ import { RegisterCustomerSchema, type RegisterCustomerState } from "../schemas/r
 import type { AuthContextType } from "../types";
 
 export const registerCustomerAction = async (
-    registerFn: AuthContextType["register"],
+    registerFn: AuthContextType["registerCustomer"],
     _: RegisterCustomerState,
     formData: FormData
 ): Promise<RegisterCustomerState> => {
@@ -20,8 +20,7 @@ export const registerCustomerAction = async (
 
     try {
         await registerFn({
-            email: validated.data.email,
-            password: validated.data.password,
+            ...validated.data
         });
 
         return { success: true };

@@ -35,7 +35,7 @@ const initialState: RegisterCustomerState = {
 
 export default function RegisterPage() {
     const { t } = useTranslation();
-    const { register } = useAuth();
+    const { registerCustomer: register } = useAuth();
     const navigate = useNavigate();
 
     const [state, formAction] = useActionState(
