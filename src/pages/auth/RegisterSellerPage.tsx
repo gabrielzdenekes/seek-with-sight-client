@@ -28,6 +28,15 @@ const initialState: RegisterSellerState = {
     success: false,
 };
 
+const REGISTER_FIELDS = [
+    { name: "businessName", labelKey: "common.fields.businessName", type: "text", autoComplete: "organization" },
+    { name: "businessAddress", labelKey: "common.fields.businessAddress", type: "text", autoComplete: "street-address" },
+    { name: "taxId", labelKey: "common.fields.taxId", type: "text", autoComplete: "off" },
+    { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
+    { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "new-password" },
+    { name: "confirmPassword", labelKey: "common.fields.confirmPassword", type: "password", autoComplete: "new-password" },
+] as const;
+
 export default function RegisterSellerPage() {
     const { t } = useTranslation();
     const { registerSeller } = useAuth();
@@ -39,16 +48,21 @@ export default function RegisterSellerPage() {
 
     return (
         <Box sx={authContainerSx}>
-            <Box sx={{ mb: 0, height: 120 }}>
-                <img
-                    src="/logo.png"
-                    alt={t("common.logoAlt")}
-                    style={{ width: "420px", objectFit: "contain" }}
-                />
-            </Box>
+            <Box
+                component="img"
+                src="/logo.png"
+                alt={t("common.logoAlt")}
+                sx={{
+                    width: "100%",
+                    maxWidth: 420,
+                    height: 120,
+                    objectFit: "contain",
+                    mb: 2
+                }}
+            />
 
             <Card sx={authCardSx}>
-                <CardContent sx={{ p: 4, textAlign: "center" }}>
+                <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
                     {state.success ? (
                         <Box sx={{ py: 3, display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
@@ -57,7 +71,7 @@ export default function RegisterSellerPage() {
                                 {t("register.successTitle")}
                             </Typography>
 
-                            <Alert severity="success" sx={{ mb: 4, borderRadius: "8px", textAlign: "left" }}>
+                            <Alert severity="success" sx={{ mb: 4, borderRadius: 2, textAlign: "left" }}>
                                 {t("register.seller.verifyEmailMessage")}
                             </Alert>
 
@@ -67,7 +81,7 @@ export default function RegisterSellerPage() {
                                 variant="contained"
                                 fullWidth
                                 disableElevation
-                                sx={{ py: 1.2, borderRadius: "8px" }}
+                                sx={{ py: 1.2, borderRadius: 2 }}
                             >
                                 {t("register.seller.goToLogin")}
                             </Button>
@@ -83,97 +97,62 @@ export default function RegisterSellerPage() {
                             </Typography>
 
                             {state.message && (
-                                <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
+                                <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
                                     {t(state.message)}
                                 </Alert>
                             )}
 
                             <Box component="form" action={formAction} noValidate>
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.businessName")}
-                                    name="businessName"
-                                    error={!!state.errors?.businessName}
-                                    helperText={state.errors?.businessName?.[0] ? t(state.errors?.businessName?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
+                                {REGISTER_FIELDS.map((field, index) => {
+                                    const fieldError = state.errors?.[field.name as keyof typeof state.errors]?.[0];
+                                    const isLast = index === REGISTER_FIELDS.length - 1;
 
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.businessAddress")}
-                                    name="businessAddress"
-                                    error={!!state.errors?.businessAddress}
-                                    helperText={state.errors?.businessAddress?.[0] ? t(state.errors?.businessAddress?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.taxId")}
-                                    name="taxId"
-                                    error={!!state.errors?.taxId}
-                                    helperText={state.errors?.taxId?.[0] ? t(state.errors?.taxId?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    label={t("common.fields.email")}
-                                    name="email"
-                                    type="email"
-                                    error={!!state.errors?.email}
-                                    helperText={state.errors?.email?.[0] ? t(state.errors?.email?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    type="password"
-                                    label={t("common.fields.password")}
-                                    name="password"
-                                    error={!!state.errors?.password}
-                                    helperText={state.errors?.password?.[0] ? t(state.errors?.password?.[0]) : null}
-                                    sx={roundedInputSx}
-                                />
-
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    type="password"
-                                    label={t("common.fields.confirmPassword")}
-                                    name="confirmPassword"
-                                    error={!!state.errors?.confirmPassword}
-                                    helperText={state.errors?.confirmPassword?.[0] ? t(state.errors?.confirmPassword?.[0]) : null}
-                                    sx={{ ...roundedInputSx, mb: 3 }}
-                                />
+                                    return (
+                                        <TextField
+                                            key={field.name}
+                                            id={`register-${field.name}`}
+                                            name={field.name}
+                                            type={field.type}
+                                            label={t(field.labelKey)}
+                                            autoComplete={field.autoComplete}
+                                            fullWidth
+                                            variant="outlined"
+                                            size="small"
+                                            error={!!fieldError}
+                                            helperText={fieldError ? t(fieldError) : null}
+                                            sx={isLast ? { ...roundedInputSx, mb: 3 } : roundedInputSx}
+                                        />
+                                    );
+                                })}
 
                                 <SubmitButton label={t("register.submit")} />
                             </Box>
 
-                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 2, mt: 2, px: 2 }}>
-                                {t("register.hasAccountPrompt")}{" "}
-                                <Link component={RouterLink} to="/login" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                                    {t("register.loginLink")}
-                                </Link>
-                            </Typography>
+                            <Box sx={{ mt: 2, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+                                <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                    {t("register.hasAccountPrompt")}{" "}
+                                    <Link
+                                        component={RouterLink}
+                                        to="/login"
+                                        underline="hover"
+                                        sx={{ color: "primary.main", fontWeight: 500 }}
+                                    >
+                                        {t("register.loginLink")}
+                                    </Link>
+                                </Typography>
 
-                            <Typography variant="body2" sx={{ color: "text.primary", fontSize: "13px", mb: 2, px: 2 }}>
-                                {t("register.seller.customerPrompt")}{" "}
-                                <Link component={RouterLink} to="/register/customer" underline="none" sx={{ color: "primary.main", fontSize: "14px", fontWeight: 500 }}>
-                                    {t("register.seller.customerLink")}
-                                </Link>
-                            </Typography>
+                                <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                    {t("register.seller.customerPrompt")}{" "}
+                                    <Link
+                                        component={RouterLink}
+                                        to="/register/customer"
+                                        underline="hover"
+                                        sx={{ color: "primary.main", fontWeight: 500 }}
+                                    >
+                                        {t("register.seller.customerLink")}
+                                    </Link>
+                                </Typography>
+                            </Box>
                         </>
                     )}
                 </CardContent>
