@@ -50,7 +50,9 @@
         "customer": {
             "title": "Create Customer Account",
             "sellerPrompt": "Want to sell on our platform?",
-            "sellerLink": "Register as a Seller"
+            "sellerLink": "Register as a Seller",
+            "verifyEmailMessage": "We've sent a verification link to your email address. Please verify your email before logging in.",
+            "goToLogin": "Go to Login"
         },
         "seller": {
             "title": "Create Seller Account",
