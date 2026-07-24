@@ -6,6 +6,7 @@ import ProductDetailsPage from "@/pages/products/ProductDetailPage";
 import AuthLayout from "@/components/layout/AuthLayout";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
+import RegisterSellerPage from "@/pages/auth/RegisterSellerPage";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,9 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "customer", element: <RegisterCustomerPage />
+                    },
+                    {
+                        path: "seller", element: <RegisterSellerPage />
                     }
                 ]
             },
