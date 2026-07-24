@@ -38,6 +38,7 @@
         "hasAccountPrompt": "Already have an account?",
         "loginLink": "Log in here",
         "socialPrompt": "sign up with your social account",
+        "successTitle": "Registration Successful",
         "validation": {
             "invalidEmail": "Invalid email address",
             "passwordMin": "Password must be at least 6 characters",
@@ -58,7 +59,9 @@
             "title": "Create Seller Account",
             "subtitle": "Partner with us and start selling",
             "customerPrompt": "Looking to buy instead?",
-            "customerLink": "Register as a Customer"
+            "customerLink": "Register as a Customer",
+            "verifyEmailMessage": "We've sent a verification link to your business email. Please verify your email before logging in.",
+            "goToLogin": "Go to Login"
         }
     }
 }

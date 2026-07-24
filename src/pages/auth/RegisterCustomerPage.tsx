@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
@@ -60,7 +60,7 @@ export default function RegisterCustomerPage() {
                             <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
 
                             <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 500, mb: 2 }}>
-                                {t("register.customer.successTitle")}
+                                {t("register.successTitle")}
                             </Typography>
 
                             <Alert severity="success" sx={{ mb: 4, borderRadius: "8px", textAlign: "left" }}>
