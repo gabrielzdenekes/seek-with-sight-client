@@ -14,9 +14,9 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-import { type RegisterState } from "@/features/auth/schemas/register-schema";
+import { type RegisterCustomerState } from "@/features/auth/schemas/register-customer-schema";
 import { useActionState, useEffect } from "react";
-import { registerAction } from "@/features/auth/actions/register-action";
+import { registerCustomerAction } from "@/features/auth/actions/register-customer-action";
 import { useTranslation } from "react-i18next";
 import {
     SOCIAL_COLORS,
@@ -27,7 +27,7 @@ import {
     socialIconSx
 } from "./styles";
 
-const initialState: RegisterState = {
+const initialState: RegisterCustomerState = {
     errors: {},
     message: null,
     success: false,
@@ -35,11 +35,11 @@ const initialState: RegisterState = {
 
 export default function RegisterPage() {
     const { t } = useTranslation();
-    const { register } = useAuth();
+    const { registerCustomer: register } = useAuth();
     const navigate = useNavigate();
 
     const [state, formAction] = useActionState(
-        registerAction.bind(null, register),
+        registerCustomerAction.bind(null, register),
         initialState
     );
 

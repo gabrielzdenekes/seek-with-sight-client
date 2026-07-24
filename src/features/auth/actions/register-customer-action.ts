@@ -1,14 +1,14 @@
-import { RegisterSchema, type RegisterState } from "../schemas/register-schema";
+import { RegisterCustomerSchema, type RegisterCustomerState } from "../schemas/register-customer-schema";
 import type { AuthContextType } from "../types";
 
-export const registerAction = async (
-    registerFn: AuthContextType["register"],
-    _: RegisterState,
+export const registerCustomerAction = async (
+    registerFn: AuthContextType["registerCustomer"],
+    _: RegisterCustomerState,
     formData: FormData
-): Promise<RegisterState> => {
+): Promise<RegisterCustomerState> => {
     const rawData = Object.fromEntries(formData.entries());
 
-    const validated = RegisterSchema.safeParse(rawData);
+    const validated = RegisterCustomerSchema.safeParse(rawData);
 
     if (!validated.success) {
         return {
@@ -20,8 +20,7 @@ export const registerAction = async (
 
     try {
         await registerFn({
-            email: validated.data.email,
-            password: validated.data.password,
+            ...validated.data
         });
 
         return { success: true };

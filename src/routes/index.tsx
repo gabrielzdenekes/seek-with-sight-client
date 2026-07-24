@@ -5,7 +5,7 @@ import ProductListPage from "@/pages/products/ProductListPage";
 import ProductDetailsPage from "@/pages/products/ProductDetailPage";
 import AuthLayout from "@/components/layout/AuthLayout";
 import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
+import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
 
 const router = createBrowserRouter([
     {
@@ -22,7 +22,14 @@ const router = createBrowserRouter([
         element: <AuthLayout />,
         children: [
             { path: "login", element: <LoginPage /> },
-            { path: "register", element: <RegisterPage /> },
+            {
+                path: "register",
+                children: [
+                    {
+                        path: "customer", element: <RegisterCustomerPage />
+                    }
+                ]
+            },
         ],
     },
 ]);

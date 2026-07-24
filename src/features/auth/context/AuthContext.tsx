@@ -1,4 +1,4 @@
-import type { AuthContextType, AuthResponse, LoginCredentials, RegisterData, User } from "@/features/auth/types";
+import type { AuthContextType, AuthResponse, CustomerProfileResponse, LoginCredentials, RegisterCustomerData, User } from "@/features/auth/types";
 import { post } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
 import { useEffect, useState, type ReactNode } from "react";
@@ -48,8 +48,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return response.data;
     };
 
-    const register = async (registerData: RegisterData): Promise<User | undefined> => {
-        const response = await post<ApiResponse<User>>("/users", registerData);
+    const registerCustomer = async (registerData: RegisterCustomerData): Promise<CustomerProfileResponse | undefined> => {
+        const response = await post<ApiResponse<CustomerProfileResponse>>("/customer-profiles", registerData);
 
         return response.data;
     };
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isLoading,
         isAuthenticated: Boolean(accessToken),
         login,
-        register,
+        registerCustomer,
         logout,
         setAccessToken,
     };
