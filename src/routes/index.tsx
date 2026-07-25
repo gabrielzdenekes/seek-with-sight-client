@@ -7,6 +7,8 @@ import AuthLayout from "@/components/layout/AuthLayout";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
 import RegisterSellerPage from "@/pages/auth/RegisterSellerPage";
+import { ProtectedRoute } from "@/features/auth/guards/ProtectedRoute";
+import { PublicRoute } from "@/features/auth/guards/PublicRoute";
 
 const router = createBrowserRouter([
     {
@@ -19,23 +21,38 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: "/",
-        element: <AuthLayout />,
+        element: <PublicRoute />,
         children: [
-            { path: "login", element: <LoginPage /> },
             {
-                path: "register",
+                path: "/",
+                element: <AuthLayout />,
                 children: [
+                    { path: "login", element: <LoginPage /> },
                     {
-                        path: "customer", element: <RegisterCustomerPage />
+                        path: "register",
+                        children: [
+                            {
+                                path: "customer", element: <RegisterCustomerPage />
+                            },
+                            {
+                                path: "seller", element: <RegisterSellerPage />
+                            }
+                        ]
                     },
-                    {
-                        path: "seller", element: <RegisterSellerPage />
-                    }
                 ]
-            },
-        ],
+            }
+        ]
+
     },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/protected",
+                element: <h1>PROTECTED</h1>
+            }
+        ]
+    }
 ]);
 
 export default router;
