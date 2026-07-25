@@ -1,0 +1,23 @@
+import { useState, useEffect } from "react";
+
+export const useDelayedLoading = (isLoading: boolean, delay = 250) => {
+    const [showLoading, setShowLoading] = useState(false);
+
+    if (!isLoading && showLoading) {
+        setShowLoading(false);
+    }
+
+    useEffect(() => {
+        if (!isLoading) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setShowLoading(true);
+        }, delay);
+
+        return () => clearTimeout(timer);
+    }, [isLoading, delay]);
+
+    return isLoading && showLoading;
+};
