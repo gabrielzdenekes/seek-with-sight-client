@@ -7,6 +7,7 @@ import AuthLayout from "@/components/layout/AuthLayout";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
 import RegisterSellerPage from "@/pages/auth/RegisterSellerPage";
+import { ProtectedRoute } from "@/features/auth/guards/ProtectedRoute";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,15 @@ const router = createBrowserRouter([
             },
         ],
     },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/protected",
+                element: <h1>PROTECTED</h1>
+            }
+        ]
+    }
 ]);
 
 export default router;
