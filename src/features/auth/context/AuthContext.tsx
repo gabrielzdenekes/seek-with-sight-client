@@ -72,8 +72,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const googleSignUp = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const response = await post<ApiResponse<AuthResponse>>("/auth/google", { accessToken: tokenResponse.access_token });
+        flow: "auth-code",
+        onSuccess: async (codeResponse) => {
+            const response = await post<ApiResponse<AuthResponse>>("/auth/google", { authCode: codeResponse.code });
 
             setAuthData(
                 response.data?.accessToken || null,
