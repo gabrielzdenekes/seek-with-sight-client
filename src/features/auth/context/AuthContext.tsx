@@ -3,6 +3,7 @@ import { post } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "@/features/auth/context/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -70,15 +71,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    const googleSignUp = async () => {
-
-    };
+    const googleSignUp = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            console.log(tokenResponse);
+        },
+        onError: (e) => {
+            console.log(e);
+        }
+    });
 
     const facebookSignUp = async () => {
 
     };
 
-    const registerWithProvider = new Map<string, () => Promise<void>>(
+    // TODO: fix any
+    const registerWithProvider = new Map<string, any>(
         [
             ["google", googleSignUp],
             ["facebook", facebookSignUp]

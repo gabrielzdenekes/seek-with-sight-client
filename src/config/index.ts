@@ -3,6 +3,11 @@ export interface AppConfig {
         baseURL: string,
         withCredentials: boolean,
         headers: { [key: string]: string }
+    },
+    authProviders: {
+        google: {
+            clientId: string
+        }
     }
 };
 
@@ -14,6 +19,11 @@ export const appConfig: Readonly<AppConfig> = Object.freeze<AppConfig>(
             headers: {
                 "Content-Type": "application/json",
             },
+        },
+        authProviders: {
+            google: {
+                clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
+            }
         }
     }
 );
