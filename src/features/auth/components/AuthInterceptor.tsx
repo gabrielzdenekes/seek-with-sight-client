@@ -9,7 +9,7 @@ interface AxiosInterceptorProps {
 let isRefreshing = false;
 let failedRequestsQueue: unknown[] = [];
 
-const processRequestsQueue = (error: any, token = null) => {
+const processRequestsQueue = (error: any, token: string | null = null) => {
     failedRequestsQueue.forEach((promise: any) => {
         if (error) {
             promise.reject(error);
