@@ -84,4 +84,6 @@ export interface AuthContextType {
     logout: () => Promise<void>;
 
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
+
+    registerWithProvider: Map<string, () => Promise<any>>
 }

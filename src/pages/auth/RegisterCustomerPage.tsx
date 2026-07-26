@@ -9,8 +9,6 @@ import {
     Link,
     Alert
 } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
@@ -20,13 +18,11 @@ import { useActionState } from "react";
 import { registerCustomerAction } from "@/features/auth/actions/register-customer-action";
 import { useTranslation } from "react-i18next";
 import {
-    SOCIAL_COLORS,
     authContainerSx,
     authCardSx,
-    roundedInputSx,
-    baseSocialButtonSx,
-    socialIconSx
+    roundedInputSx
 } from "./styles";
+import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
 
 const initialState: RegisterCustomerState = {
     errors: {},
@@ -53,21 +49,6 @@ const REGISTER_FIELD_ROWS = [
     ],
 ] as const;
 
-const SOCIAL_PROVIDERS = [
-    {
-        key: "facebook",
-        labelKey: "common.social.facebook",
-        Icon: FacebookIcon,
-        color: SOCIAL_COLORS.facebook,
-    },
-    {
-        key: "google",
-        labelKey: "common.social.google",
-        Icon: GoogleIcon,
-        color: SOCIAL_COLORS.google,
-    },
-] as const;
-
 export default function RegisterCustomerPage() {
     const { t } = useTranslation();
     const { registerCustomer } = useAuth();
@@ -77,9 +58,18 @@ export default function RegisterCustomerPage() {
         initialState
     );
 
+    const onSocialProviderSuccess = (providerName: string, data: any) => {
+        console.log(providerName);
+        console.log(data);
+    };
+
+    const onSocialProviderFailure = (providerName: string, error: unknown) => {
+        console.log(providerName);
+        console.log(error);
+    };
+
     return (
         <Box sx={authContainerSx}>
-            {/* Responsive Logo Container */}
             <Box
                 component="img"
                 src="/logo.png"
@@ -208,24 +198,10 @@ export default function RegisterCustomerPage() {
                                 {t("register.socialPrompt")}
                             </Typography>
 
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                                {SOCIAL_PROVIDERS.map(({ key, labelKey, Icon, color }) => (
-                                    <Button
-                                        key={key}
-                                        fullWidth
-                                        variant="contained"
-                                        disableElevation
-                                        startIcon={<Icon sx={socialIconSx} />}
-                                        sx={{
-                                            ...baseSocialButtonSx,
-                                            backgroundColor: color.main,
-                                            "&:hover": { backgroundColor: color.hover },
-                                        }}
-                                    >
-                                        {t(labelKey)}
-                                    </Button>
-                                ))}
-                            </Box>
+                            <SocialProviders
+                                onSuccess={(provName, data) => onSocialProviderSuccess(provName, data)}
+                                onFailure={(provName, error) => onSocialProviderFailure(provName, error)}
+                            />
                         </>
                     )}
                 </CardContent>

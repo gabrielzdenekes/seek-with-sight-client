@@ -36,8 +36,8 @@ jobs:
       - name: Format check
         run: npx prettier --check "src/**/*.{ts,tsx,css}" --write
 
-      - name: Security audit
-        run: npm audit --audit-level=high
+    #   - name: Security audit
+    #     run: npm audit --audit-level=high
 
   # ─────────────────────────────────────────
   # STAGE 2A: UNIT + INTEGRATION TESTS

@@ -3,6 +3,7 @@ import { post } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "@/features/auth/context/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -70,6 +71,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const googleSignUp = useGoogleLogin({
+        flow: "auth-code",
+        onSuccess: async (codeResponse) => {
+            const response = await post<ApiResponse<AuthResponse>>("/auth/google", { authCode: codeResponse.code });
+
+            setAuthData(
+                response.data?.accessToken || null,
+                response.data?.user || null
+            );
+        },
+        onError: (e) => {
+            console.log(e);
+        }
+    });
+
+    const registerWithProvider = new Map<string, any>(
+        [
+            ["google", googleSignUp]
+        ]
+    );
+
     const value: AuthContextType = {
         user,
         accessToken,
@@ -80,6 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         registerSeller,
         logout,
         setAccessToken,
+        registerWithProvider
     };
 
     return <AuthContext value={value}>{children}</AuthContext>;

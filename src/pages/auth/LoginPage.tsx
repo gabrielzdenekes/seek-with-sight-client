@@ -4,13 +4,10 @@ import {
     CardContent,
     Typography,
     TextField,
-    Button,
     Divider,
     Link,
     Alert
 } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { SubmitButton } from "@/components/ui/SubmitButton";
@@ -19,13 +16,11 @@ import { useActionState, useEffect } from "react";
 import { loginAction } from "@/features/auth/actions/login-action";
 import { useTranslation } from "react-i18next";
 import {
-    SOCIAL_COLORS,
     authContainerSx,
     authCardSx,
     roundedInputSx,
-    baseSocialButtonSx,
-    socialIconSx
 } from "./styles";
+import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
 
 const initialState: LoginState = {
     errors: {},
@@ -38,21 +33,6 @@ const LOGIN_FIELDS = [
     { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "current-password" },
 ] as const;
 
-const SOCIAL_PROVIDERS = [
-    {
-        key: "facebook",
-        labelKey: "common.social.facebook",
-        Icon: FacebookIcon,
-        color: SOCIAL_COLORS.facebook,
-    },
-    {
-        key: "google",
-        labelKey: "common.social.google",
-        Icon: GoogleIcon,
-        color: SOCIAL_COLORS.google,
-    },
-] as const;
-
 export default function LoginPage() {
     const { t } = useTranslation();
     const { login } = useAuth();
@@ -63,6 +43,16 @@ export default function LoginPage() {
         initialState
     );
 
+    const onSocialProviderSuccess = (providerName: string, data: any) => {
+        console.log(providerName);
+        console.log(data);
+    };
+
+    const onSocialProviderFailure = (providerName: string, error: unknown) => {
+        console.log(providerName);
+        console.log(error);
+    };
+
     useEffect(() => {
         if (state.success) {
             navigate("/");
@@ -71,7 +61,6 @@ export default function LoginPage() {
 
     return (
         <Box sx={authContainerSx}>
-            {/* Responsive Logo Container */}
             <Box
                 component="img"
                 src="/logo.png"
@@ -148,24 +137,10 @@ export default function LoginPage() {
                         {t("login.socialPrompt")}
                     </Typography>
 
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                        {SOCIAL_PROVIDERS.map(({ key, labelKey, Icon, color }) => (
-                            <Button
-                                key={key}
-                                fullWidth
-                                variant="contained"
-                                disableElevation
-                                startIcon={<Icon sx={socialIconSx} />}
-                                sx={{
-                                    ...baseSocialButtonSx,
-                                    backgroundColor: color.main,
-                                    "&:hover": { backgroundColor: color.hover },
-                                }}
-                            >
-                                {t(labelKey)}
-                            </Button>
-                        ))}
-                    </Box>
+                    <SocialProviders
+                        onSuccess={(provName, data) => onSocialProviderSuccess(provName, data)}
+                        onFailure={(provName, error) => onSocialProviderFailure(provName, error)}
+                    />
                 </CardContent>
             </Card>
         </Box>
