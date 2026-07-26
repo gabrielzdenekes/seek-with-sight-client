@@ -11,12 +11,6 @@ const SOCIAL_PROVIDERS = [
         labelKey: "common.social.google",
         Icon: GoogleIcon,
         color: SOCIAL_COLORS.google,
-    },
-    {
-        key: "facebook",
-        labelKey: "common.social.facebook",
-        Icon: FacebookIcon,
-        color: SOCIAL_COLORS.facebook,
     }
 ] as const;
 

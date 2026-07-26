@@ -86,15 +86,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     });
 
-    const facebookSignUp = async () => {
-
-    };
-
-    // TODO: fix any
     const registerWithProvider = new Map<string, any>(
         [
-            ["google", googleSignUp],
-            ["facebook", facebookSignUp]
+            ["google", googleSignUp]
         ]
     );
 
