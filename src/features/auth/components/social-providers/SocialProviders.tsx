@@ -7,17 +7,17 @@ import { useTranslation } from "react-i18next";
 
 const SOCIAL_PROVIDERS = [
     {
-        key: "facebook",
-        labelKey: "common.social.facebook",
-        Icon: FacebookIcon,
-        color: SOCIAL_COLORS.facebook,
-    },
-    {
         key: "google",
         labelKey: "common.social.google",
         Icon: GoogleIcon,
         color: SOCIAL_COLORS.google,
     },
+    {
+        key: "facebook",
+        labelKey: "common.social.facebook",
+        Icon: FacebookIcon,
+        color: SOCIAL_COLORS.facebook,
+    }
 ] as const;
 
 interface SocialProviderProps {
