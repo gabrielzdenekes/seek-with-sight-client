@@ -69,7 +69,6 @@ export default function LoginPage() {
 
     return (
         <Box sx={authContainerSx}>
-            {/* Responsive Logo Container */}
             <Box
                 component="img"
                 src="/logo.png"
