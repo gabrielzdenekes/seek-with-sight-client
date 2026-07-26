@@ -1,6 +1,5 @@
 import { Box, Button } from "@mui/material";
 import { baseSocialButtonSx, SOCIAL_COLORS, socialIconSx } from "@/features/auth/components/social-providers/styles";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "../../context/useAuth";
 import { useTranslation } from "react-i18next";
