@@ -19,13 +19,11 @@ import { useActionState, useEffect } from "react";
 import { loginAction } from "@/features/auth/actions/login-action";
 import { useTranslation } from "react-i18next";
 import {
-    SOCIAL_COLORS,
     authContainerSx,
     authCardSx,
     roundedInputSx,
-    baseSocialButtonSx,
-    socialIconSx
 } from "./styles";
+import { SOCIAL_COLORS, socialIconSx, baseSocialButtonSx } from "@/features/auth/components/social-providers/styles";
 
 const initialState: LoginState = {
     errors: {},

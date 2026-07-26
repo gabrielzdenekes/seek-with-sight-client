@@ -70,6 +70,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const googleSignUp = async () => {
+
+    };
+
+    const facebookSignUp = async () => {
+
+    };
+
+    const registerWithProvider = new Map<string, () => Promise<void>>(
+        [
+            ["google", googleSignUp],
+            ["facebook", facebookSignUp]
+        ]
+    );
+
     const value: AuthContextType = {
         user,
         accessToken,
@@ -80,6 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         registerSeller,
         logout,
         setAccessToken,
+        registerWithProvider
     };
 
     return <AuthContext value={value}>{children}</AuthContext>;
