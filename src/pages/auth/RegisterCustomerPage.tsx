@@ -58,16 +58,6 @@ export default function RegisterCustomerPage() {
         initialState
     );
 
-    const onSocialProviderSuccess = (providerName: string, data: any) => {
-        console.log(providerName);
-        console.log(data);
-    };
-
-    const onSocialProviderFailure = (providerName: string, error: unknown) => {
-        console.log(providerName);
-        console.log(error);
-    };
-
     return (
         <Box sx={authContainerSx}>
             <Box
@@ -198,10 +188,7 @@ export default function RegisterCustomerPage() {
                                 {t("register.socialPrompt")}
                             </Typography>
 
-                            <SocialProviders
-                                onSuccess={(provName, data) => onSocialProviderSuccess(provName, data)}
-                                onFailure={(provName, error) => onSocialProviderFailure(provName, error)}
-                            />
+                            <SocialProviders />
                         </>
                     )}
                 </CardContent>

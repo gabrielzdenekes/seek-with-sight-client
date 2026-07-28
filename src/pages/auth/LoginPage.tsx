@@ -41,16 +41,6 @@ export default function LoginPage() {
         initialState
     );
 
-    const onSocialProviderSuccess = (providerName: string, data: any) => {
-        console.log(providerName);
-        console.log(data);
-    };
-
-    const onSocialProviderFailure = (providerName: string, error: unknown) => {
-        console.log(providerName);
-        console.log(error);
-    };
-
     useEffect(() => {
         if (state.success) {
             navigate("/");
@@ -105,10 +95,7 @@ export default function LoginPage() {
                         {t("login.socialPrompt")}
                     </Typography>
 
-                    <SocialProviders
-                        onSuccess={(prov, data) => onSocialProviderSuccess(prov, data)}
-                        onFailure={(prov, err) => onSocialProviderFailure(prov, err)}
-                    />
+                    <SocialProviders />
                 </CardContent>
             </Card>
         </Box>
