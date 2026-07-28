@@ -3,15 +3,11 @@ import {
     Card,
     CardContent,
     Typography,
-    TextField,
     Divider,
-    Link,
-    Alert
+    Link
 } from "@mui/material";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { SubmitButton } from "@/components/ui/SubmitButton";
-import { type LoginState } from "@/features/auth/schemas/login-schema";
 import { useActionState, useEffect } from "react";
 import { loginAction } from "@/features/auth/actions/login-action";
 import { useTranslation } from "react-i18next";
@@ -21,8 +17,10 @@ import {
     roundedInputSx,
 } from "./styles";
 import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
+import GenericForm from "@/components/ui/form/GenericForm";
+import type { FormState } from "@/components/ui/form/form.types";
 
-const initialState: LoginState = {
+const initialState: FormState = {
     errors: {},
     message: null,
     success: false,
@@ -84,62 +82,32 @@ export default function LoginPage() {
                         {t("login.subtitle")}
                     </Typography>
 
-                    {state.message && (
-                        <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
-                            {t(state.message)}
-                        </Alert>
-                    )}
+                    <GenericForm
+                        fields={LOGIN_FIELDS}
+                        state={state}
+                        action={formAction}
+                        submitLabelKey="login.submit"
+                        inputSx={roundedInputSx}
+                    >
+                        <Box sx={{ mt: 1, mb: 3, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                            <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                {t("login.noAccountPrompt")}
+                            </Typography>
+                            <Link component={RouterLink} to="/register/customer" underline="hover">
+                                {t("login.createAccountLink")}
+                            </Link>
+                        </Box>
+                    </GenericForm>
 
-                    <Box component="form" action={formAction} noValidate>
-                        {LOGIN_FIELDS.map((field) => {
-                            const fieldError = state.errors?.[field.name as keyof typeof state.errors]?.[0];
-
-                            return (
-                                <TextField
-                                    key={field.name}
-                                    id={`login-${field.name}`}
-                                    name={field.name}
-                                    type={field.type}
-                                    label={t(field.labelKey)}
-                                    autoComplete={field.autoComplete}
-                                    fullWidth
-                                    variant="outlined"
-                                    size="small"
-                                    error={!!fieldError}
-                                    helperText={fieldError ? t(fieldError) : null}
-                                    sx={roundedInputSx}
-                                />
-                            );
-                        })}
-
-                        <SubmitButton label={t("login.submit")} />
-                    </Box>
-
-                    <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 0.5 }}>
-                        <Typography variant="body2" sx={{ color: "text.primary" }}>
-                            {t("login.noAccountPrompt")}
-                        </Typography>
-                        <Link
-                            component={RouterLink}
-                            to="/register/customer"
-                            underline="hover"
-                            sx={{ color: "primary.main", fontWeight: 500 }}
-                        >
-                            {t("login.createAccountLink")}
-                        </Link>
-                    </Box>
-
-                    <Divider sx={{ mb: 1, color: "text.secondary" }}>
-                        {t("common.or")}
-                    </Divider>
+                    <Divider sx={{ my: 2, color: "text.secondary" }}>{t("common.or")}</Divider>
 
                     <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
                         {t("login.socialPrompt")}
                     </Typography>
 
                     <SocialProviders
-                        onSuccess={(provName, data) => onSocialProviderSuccess(provName, data)}
-                        onFailure={(provName, error) => onSocialProviderFailure(provName, error)}
+                        onSuccess={(prov, data) => onSocialProviderSuccess(prov, data)}
+                        onFailure={(prov, err) => onSocialProviderFailure(prov, err)}
                     />
                 </CardContent>
             </Card>
