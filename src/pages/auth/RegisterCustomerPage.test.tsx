@@ -42,6 +42,16 @@ describe("RegisterCustomerPage", () => {
         expect(screen.getByText("common.social.google")).toBeInTheDocument();
     });
 
+    it("contains navigation links pointing to login and seller registration", () => {
+        renderComponent();
+
+        const loginLink = screen.getByRole("link", { name: "register.loginLink" });
+        const sellerLink = screen.getByRole("link", { name: "register.customer.sellerLink" });
+
+        expect(loginLink).toHaveAttribute("href", "/login");
+        expect(sellerLink).toHaveAttribute("href", "/register/seller");
+    });
+
     function renderComponent() {
         render(
             <MemoryRouter>
