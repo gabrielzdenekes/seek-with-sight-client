@@ -3,6 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
 import { useAuth } from "@/features/auth/context/useAuth";
+import userEvent from "@testing-library/user-event";
 
 vi.mock("@/features/auth/context/useAuth", () => ({
     useAuth: vi.fn(),
@@ -50,6 +51,34 @@ describe("RegisterCustomerPage", () => {
 
         expect(loginLink).toHaveAttribute("href", "/login");
         expect(sellerLink).toHaveAttribute("href", "/register/seller");
+    });
+
+    it("switches to success view after successful registration", async () => {
+        const user = userEvent.setup();
+
+        mockRegisterCustomer.mockResolvedValueOnce({ id: "123", email: "test@example.com" });
+
+        renderComponent();
+
+        const password = "password@1_";
+
+        await user.type(screen.getByLabelText("common.fields.firstName"), "Jane");
+        await user.type(screen.getByLabelText("common.fields.lastName"), "Doe");
+        await user.type(screen.getByLabelText("common.fields.email"), "jane@example.com");
+        await user.type(screen.getByLabelText("common.fields.password"), password);
+        await user.type(screen.getByLabelText("common.fields.confirmPassword"), password);
+        await user.type(screen.getByLabelText("common.fields.phone"), "647123123");
+
+        await user.click(screen.getByRole("button", { name: "register.submit" }));
+
+        expect(await screen.findByText("register.successTitle")).toBeInTheDocument();
+        expect(screen.getByText("register.customer.verifyEmailMessage")).toBeInTheDocument();
+
+        const goToLoginBtn = screen.getByRole("link", { name: "register.customer.goToLogin" });
+        expect(goToLoginBtn).toBeInTheDocument();
+        expect(goToLoginBtn).toHaveAttribute("href", "/login");
+
+        expect(screen.queryByText("register.customer.title")).not.toBeInTheDocument();
     });
 
     function renderComponent() {
