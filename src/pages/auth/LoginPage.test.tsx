@@ -1,8 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import LoginPage from "@/pages/auth/LoginPage";
 import { useAuth } from "@/features/auth/context/useAuth";
+import userEvent from "@testing-library/user-event";
+import { onSubmitAction } from "@/components/ui/form/on-submit-action";
 
 const mockNavigate = vi.fn();
 
@@ -50,6 +52,27 @@ describe("LoginPage", () => {
         expect(screen.getByText("login.noAccountPrompt")).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "login.createAccountLink" })).toHaveAttribute("href", "/register/customer");
         expect(screen.getByText("login.socialPrompt")).toBeInTheDocument();
+    });
+
+    it("navigates to the home page on successful form submission", async () => {
+        const user = userEvent.setup();
+
+        vi.mocked(onSubmitAction).mockResolvedValueOnce({
+            errors: {},
+            message: "success",
+            success: true
+        });
+
+        renderComponent();
+
+        await user.type(screen.getByLabelText("common.fields.email"), "test@example.com");
+        await user.type(screen.getByLabelText("common.fields.password"), "password123");
+
+        await user.click(screen.getByRole("button", { name: "login.submit" }));
+
+        await waitFor(() => {
+            expect(mockNavigate).toHaveBeenCalledWith("/");
+        });
     });
 
     function renderComponent() {
