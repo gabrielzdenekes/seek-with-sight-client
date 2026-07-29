@@ -14,9 +14,9 @@ const SOCIAL_PROVIDERS = [
 ] as const;
 
 interface SocialProviderProps {
-    onSuccess: (providerName: ProviderKey, data: any) => void;
+    onSuccess?: (providerName: ProviderKey, data: any) => void;
 
-    onFailure: (providerName: string, error: unknown) => void;
+    onFailure?: (providerName: string, error: unknown) => void;
 }
 
 type ProviderKey = typeof SOCIAL_PROVIDERS[number]["key"];
@@ -31,9 +31,13 @@ export default function SocialProviders(props: SocialProviderProps) {
 
             const data = await loginAction();
 
-            props.onSuccess(providerName, data);
+            if (props.onSuccess) {
+                props.onSuccess(providerName, data);
+            }
         } catch (e) {
-            props.onFailure(providerName, e);
+            if (props.onFailure) {
+                props.onFailure(providerName, e);
+            }
         }
     };
 

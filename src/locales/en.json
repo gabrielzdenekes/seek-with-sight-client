@@ -16,6 +16,9 @@
         "social": {
             "facebook": "Facebook",
             "google": "Google"
+        },
+        "error": {
+            "somethingWentWrong": "Something went wrong"
         }
     },
     "login": {
@@ -63,5 +66,8 @@
             "verifyEmailMessage": "We've sent a verification link to your business email. Please verify your email before logging in.",
             "goToLogin": "Go to Login"
         }
+    },
+    "apiErrors": {
+        "unauthorized": "Access denied. Your session may have expired, or you lack the required clearance to view this resource."
     }
 }

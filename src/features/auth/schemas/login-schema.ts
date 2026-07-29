@@ -9,14 +9,3 @@ export const LoginSchema = z.object({
         .string()
         .min(1, "login.validation.passwordRequired")
 });
-
-export type LoginState = {
-    errors?: {
-        email?: string[];
-        password?: string[];
-    };
-
-    message?: string | null;
-
-    success?: boolean;
-};
