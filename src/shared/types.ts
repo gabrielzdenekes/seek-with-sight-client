@@ -8,7 +8,7 @@ export interface ApiResponse<T> {
     status: number;
 }
 
-export interface ApiErrorResponse<T> extends ApiResponse<T> {
+export interface ApiErrorResponse extends ApiResponse<any> {
     errorCode: string;
 }
 

@@ -1,4 +1,8 @@
 import type { FormState } from "@/components/ui/form/form.types";
+import { errorCodeMap } from "@/shared/error-code-map";
+import { tryResolveApiErrorResponse } from "@/shared/http";
+import type { ApiErrorResponse } from "@/shared/types";
+import { AxiosError } from "axios";
 import type { ZodObject } from "zod";
 
 export async function onSubmitAction(
@@ -24,11 +28,21 @@ export async function onSubmitAction(
 
         return { success: true };
     } catch (e) {
-        console.log(e);
+        const apiErrorResponse = tryResolveApiErrorResponse(e);
+
+        if (apiErrorResponse) {
+            const errorCode = apiErrorResponse.errorCode;
+
+            return {
+                errors: {},
+                message: errorCodeMap[errorCode],
+                success: false,
+            };
+        }
 
         return {
             errors: {},
-            message: "login.validation.failed",
+            message: "common.error.somethingWentWrong",
             success: false,
         };
     }

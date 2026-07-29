@@ -1,4 +1,6 @@
 import { api } from "@/lib/axios";
+import type { ApiErrorResponse } from "@/shared/types";
+import { AxiosError } from "axios";
 
 interface RequestConfig {
     headers: { [key: string]: string }
@@ -44,4 +46,14 @@ export async function del<T>(url: string, config?: RequestConfig): Promise<T> {
     const response = await api.delete<T>(url, config);
 
     return response.data;
+}
+
+export function tryResolveApiErrorResponse(error: any): ApiErrorResponse | null {
+    let apiErrorResponse = null;
+
+    if (error instanceof AxiosError) {
+        apiErrorResponse = error?.response?.data as ApiErrorResponse;
+    }
+
+    return apiErrorResponse;
 }
