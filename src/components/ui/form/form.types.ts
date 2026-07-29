@@ -1,5 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 import type { FieldConfig } from "./field.types";
+import type { ZodObject } from "zod";
 
 export interface FormState {
     success: boolean;
@@ -9,8 +10,9 @@ export interface FormState {
 
 export interface GenericFormProps {
     fields: readonly FieldConfig[];
-    state: FormState;
-    action: (payload: FormData) => void;
+    schema: ZodObject,
+    action: (payload: any) => Promise<any>;
+    onFormSuccess?: () => void;
     submitLabelKey: string;
     containerSx?: SxProps<Theme>;
     inputSx?: SxProps<Theme>;

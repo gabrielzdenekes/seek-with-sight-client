@@ -1,11 +1,15 @@
-import { LoginSchema, type LoginState } from "../schemas/login-schema";
-import type { AuthContextType } from "../types";
+import type { FormState } from "@/components/ui/form/form.types";
+import type { ZodObject } from "zod";
 
+export async function formAction(
+    action: <TFormData>(data: TFormData) => Promise<void>,
+    schema: ZodObject,
+    _: FormState,
+    formData: FormData
+): Promise<FormState> {
 
-export const loginAction = async (loginFn: AuthContextType["login"], _: LoginState, formData: FormData): Promise<LoginState> => {
     const rawData = Object.fromEntries(formData.entries());
-
-    const validated = LoginSchema.safeParse(rawData);
+    const validated = schema.safeParse(rawData);
 
     if (!validated.success) {
         return {
@@ -16,14 +20,16 @@ export const loginAction = async (loginFn: AuthContextType["login"], _: LoginSta
     }
 
     try {
-        await loginFn(validated.data);
+        await action(validated.data);
 
         return { success: true };
-    } catch {
+    } catch (e) {
+        console.log(e);
+
         return {
             errors: {},
             message: "login.validation.failed",
             success: false,
         };
     }
-};
+}

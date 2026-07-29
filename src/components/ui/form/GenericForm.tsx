@@ -1,12 +1,21 @@
-import type { GenericFormProps } from "@/components/ui/form/form.types";
+import { formAction } from "@/components/ui/form/form-action";
+import type { FormState, GenericFormProps } from "@/components/ui/form/form.types";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { Alert, Box, TextField } from "@mui/material";
+import { useActionState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+
+const initialState: FormState = {
+    errors: {},
+    message: null,
+    success: false,
+};
 
 export default function GenericForm({
     fields,
-    state,
     action,
+    schema,
+    onFormSuccess,
     submitLabelKey,
     containerSx,
     inputSx,
@@ -15,8 +24,19 @@ export default function GenericForm({
 
     const { t } = useTranslation();
 
+    const [state, fa] = useActionState(
+        formAction.bind(null, action, schema),
+        initialState
+    );
+
+    useEffect(() => {
+        if (state.success && onFormSuccess) {
+            onFormSuccess();
+        }
+    }, [state, onFormSuccess]);
+
     return (
-        <Box component="form" action={action} noValidate sx={containerSx}>
+        <Box component="form" action={fa} noValidate sx={containerSx}>
             {state.message && (
                 <Alert
                     severity={state.success ? "success" : "error"}

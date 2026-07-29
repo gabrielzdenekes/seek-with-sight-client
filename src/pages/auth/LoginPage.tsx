@@ -8,8 +8,6 @@ import {
 } from "@mui/material";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { useActionState, useEffect } from "react";
-import { loginAction } from "@/features/auth/actions/login-action";
 import { useTranslation } from "react-i18next";
 import {
     authContainerSx,
@@ -18,13 +16,7 @@ import {
 } from "./styles";
 import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
 import GenericForm from "@/components/ui/form/GenericForm";
-import type { FormState } from "@/components/ui/form/form.types";
-
-const initialState: FormState = {
-    errors: {},
-    message: null,
-    success: false,
-};
+import { LoginSchema } from "@/features/auth/schemas/login-schema";
 
 const LOGIN_FIELDS = [
     { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
@@ -36,16 +28,9 @@ export default function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const [state, formAction] = useActionState(
-        loginAction.bind(null, login),
-        initialState
-    );
-
-    useEffect(() => {
-        if (state.success) {
-            navigate("/");
-        }
-    }, [state.success, navigate]);
+    function onLoginSuccess() {
+        navigate("/");
+    }
 
     return (
         <Box sx={authContainerSx}>
@@ -74,8 +59,9 @@ export default function LoginPage() {
 
                     <GenericForm
                         fields={LOGIN_FIELDS}
-                        state={state}
-                        action={formAction}
+                        schema={LoginSchema}
+                        onFormSuccess={onLoginSuccess}
+                        action={login}
                         submitLabelKey="login.submit"
                         inputSx={roundedInputSx}
                     >
