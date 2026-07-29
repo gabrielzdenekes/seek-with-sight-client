@@ -1,7 +1,7 @@
 import type { FormState } from "@/components/ui/form/form.types";
 import type { ZodObject } from "zod";
 
-export async function formAction(
+export async function onSubmitAction(
     action: <TFormData>(data: TFormData) => Promise<void>,
     schema: ZodObject,
     _: FormState,

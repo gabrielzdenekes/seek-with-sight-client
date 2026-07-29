@@ -1,4 +1,4 @@
-import { formAction } from "@/components/ui/form/form-action";
+import { onSubmitAction } from "@/components/ui/form/form-action";
 import type { FormState, GenericFormProps } from "@/components/ui/form/form.types";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { Alert, Box, TextField } from "@mui/material";
@@ -25,7 +25,7 @@ export default function GenericForm({
     const { t } = useTranslation();
 
     const [state, fa] = useActionState(
-        formAction.bind(null, action, schema),
+        onSubmitAction.bind(null, action, schema),
         initialState
     );
 
