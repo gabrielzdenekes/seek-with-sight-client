@@ -3,7 +3,6 @@ import {
     Card,
     CardContent,
     Typography,
-    TextField,
     Link,
     Alert,
     Button
@@ -11,22 +10,15 @@ import {
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
-import { SubmitButton } from "@/components/ui/SubmitButton";
-import { type RegisterSellerState } from "@/features/auth/schemas/register-seller-schema";
-import { useActionState } from "react";
-import { registerSellerAction } from "@/features/auth/actions/register-seller-action";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     authContainerSx,
     authCardSx,
     roundedInputSx
 } from "./styles";
-
-const initialState: RegisterSellerState = {
-    errors: {},
-    message: null,
-    success: false,
-};
+import GenericForm from "@/components/ui/form/GenericForm";
+import { RegisterSellerSchema } from "@/features/auth/schemas/register-seller-schema";
 
 const REGISTER_FIELDS = [
     { name: "businessName", labelKey: "common.fields.businessName", type: "text", autoComplete: "organization" },
@@ -40,11 +32,11 @@ const REGISTER_FIELDS = [
 export default function RegisterSellerPage() {
     const { t } = useTranslation();
     const { registerSeller } = useAuth();
+    const [registerSuccess, setRegisterSuccess] = useState(false);
 
-    const [state, formAction] = useActionState(
-        registerSellerAction.bind(null, registerSeller),
-        initialState
-    );
+    function onRegisterSuccess() {
+        setRegisterSuccess(true);
+    }
 
     return (
         <Box sx={authContainerSx}>
@@ -63,7 +55,7 @@ export default function RegisterSellerPage() {
 
             <Card sx={authCardSx}>
                 <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
-                    {state.success ? (
+                    {registerSuccess ? (
                         <Box sx={{ py: 3, display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
 
@@ -96,63 +88,40 @@ export default function RegisterSellerPage() {
                                 {t("register.seller.subtitle")}
                             </Typography>
 
-                            {state.message && (
-                                <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
-                                    {t(state.message)}
-                                </Alert>
-                            )}
+                            <GenericForm
+                                fields={REGISTER_FIELDS}
+                                action={registerSeller}
+                                onFormSuccess={onRegisterSuccess}
+                                schema={RegisterSellerSchema}
+                                submitLabelKey="register.submit"
+                                inputSx={roundedInputSx}>
 
-                            <Box component="form" action={formAction} noValidate>
-                                {REGISTER_FIELDS.map((field, index) => {
-                                    const fieldError = state.errors?.[field.name as keyof typeof state.errors]?.[0];
-                                    const isLast = index === REGISTER_FIELDS.length - 1;
+                                <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+                                    <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                        {t("register.hasAccountPrompt")}{" "}
+                                        <Link
+                                            component={RouterLink}
+                                            to="/login"
+                                            underline="hover"
+                                            sx={{ color: "primary.main", fontWeight: 500 }}
+                                        >
+                                            {t("register.loginLink")}
+                                        </Link>
+                                    </Typography>
 
-                                    return (
-                                        <TextField
-                                            key={field.name}
-                                            id={`register-${field.name}`}
-                                            name={field.name}
-                                            type={field.type}
-                                            label={t(field.labelKey)}
-                                            autoComplete={field.autoComplete}
-                                            fullWidth
-                                            variant="outlined"
-                                            size="small"
-                                            error={!!fieldError}
-                                            helperText={fieldError ? t(fieldError) : null}
-                                            sx={isLast ? { ...roundedInputSx, mb: 3 } : roundedInputSx}
-                                        />
-                                    );
-                                })}
-
-                                <SubmitButton label={t("register.submit")} />
-                            </Box>
-
-                            <Box sx={{ mt: 2, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-                                <Typography variant="body2" sx={{ color: "text.primary" }}>
-                                    {t("register.hasAccountPrompt")}{" "}
-                                    <Link
-                                        component={RouterLink}
-                                        to="/login"
-                                        underline="hover"
-                                        sx={{ color: "primary.main", fontWeight: 500 }}
-                                    >
-                                        {t("register.loginLink")}
-                                    </Link>
-                                </Typography>
-
-                                <Typography variant="body2" sx={{ color: "text.primary" }}>
-                                    {t("register.seller.customerPrompt")}{" "}
-                                    <Link
-                                        component={RouterLink}
-                                        to="/register/customer"
-                                        underline="hover"
-                                        sx={{ color: "primary.main", fontWeight: 500 }}
-                                    >
-                                        {t("register.seller.customerLink")}
-                                    </Link>
-                                </Typography>
-                            </Box>
+                                    <Typography variant="body2" sx={{ color: "text.primary" }}>
+                                        {t("register.seller.customerPrompt")}{" "}
+                                        <Link
+                                            component={RouterLink}
+                                            to="/register/customer"
+                                            underline="hover"
+                                            sx={{ color: "primary.main", fontWeight: 500 }}
+                                        >
+                                            {t("register.seller.customerLink")}
+                                        </Link>
+                                    </Typography>
+                                </Box>
+                            </GenericForm>
                         </>
                     )}
                 </CardContent>
