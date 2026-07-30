@@ -19,7 +19,7 @@ import {
     Menu as MenuIcon,
     KeyboardArrowDown as ArrowDownIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom"; // Assuming react-router
+import { Link } from "react-router-dom";
 import type { Category } from "@/components/ui/navbar/types";
 import {
     appBarSx,
