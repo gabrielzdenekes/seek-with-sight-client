@@ -18,7 +18,6 @@ import {
     AccountCircle as AccountIcon,
     Menu as MenuIcon,
     KeyboardArrowDown as ArrowDownIcon,
-    KeyboardArrowRight as ArrowRightIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import type { Category } from "@/components/ui/navbar/types";
@@ -29,79 +28,10 @@ import {
     searchContainerSx,
     searchInputSx,
     actionsContainerSx,
-    nestedMenuItemSx,
 } from "./styles";
 import { get } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
-
-function RecursiveCategoryItem({
-    category,
-    closeParentMenu,
-}: {
-    category: Category;
-    closeParentMenu: () => void;
-}) {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const hasChildren = category.children && category.children.length > 0;
-
-    const handleMouseEnter = (event: MouseEvent<HTMLElement>) => {
-        if (hasChildren) {
-            setAnchorEl(event.currentTarget);
-        }
-    };
-
-    const handleMouseLeave = () => {
-        setAnchorEl(null);
-    };
-
-    const handleFinalSelection = () => {
-        setAnchorEl(null);
-        closeParentMenu();
-    };
-
-    if (!hasChildren) {
-        return (
-            <MenuItem
-                component={Link}
-                to={`/category/${category.slug}`}
-                onClick={closeParentMenu}
-            >
-                {category.name}
-            </MenuItem>
-        );
-    }
-
-    return (
-        <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <MenuItem sx={nestedMenuItemSx}>
-                {category.name}
-                <ArrowRightIcon fontSize="small" color="action" />
-            </MenuItem>
-
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleMouseLeave}
-                disablePortal
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "left" }}
-                sx={{ pointerEvents: "none" }}
-                slotProps={{
-                    paper: { sx: { pointerEvents: "auto" } },
-                }}
-            >
-                {category.children!.map((child) => (
-                    <RecursiveCategoryItem
-                        key={child.id}
-                        category={child}
-                        closeParentMenu={handleFinalSelection}
-                    />
-                ))}
-            </Menu>
-        </Box>
-    );
-}
+import RecursiveCategoryItem from "@/components/ui/navbar/RecursiveCategoryItem";
 
 export default function Navbar() {
     const [categories, setCategories] = useState<Category[]>([]);
