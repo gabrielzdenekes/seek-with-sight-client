@@ -1,4 +1,5 @@
-import { useState, useEffect, type MouseEvent } from "react";
+import { useState, useEffect, useCallback, type MouseEvent } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
     AppBar,
     Toolbar,
@@ -19,8 +20,11 @@ import {
     Menu as MenuIcon,
     KeyboardArrowDown as ArrowDownIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+
+import RecursiveCategoryItem from "@/components/ui/navbar/RecursiveCategoryItem";
 import type { Category } from "@/components/ui/navbar/types";
+import { get } from "@/shared/http";
+import type { ApiResponse } from "@/shared/types";
 import {
     appBarSx,
     toolbarSx,
@@ -29,41 +33,49 @@ import {
     searchInputSx,
     actionsContainerSx,
 } from "./styles";
-import { get } from "@/shared/http";
-import type { ApiResponse } from "@/shared/types";
-import RecursiveCategoryItem from "@/components/ui/navbar/RecursiveCategoryItem";
 
 export default function Navbar() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-    const [categoryAnchorEl, setCategoryAnchorEl] = useState<null | HTMLElement>(null);
+    const [isLoadingCategories, setIsLoadingCategories] = useState<boolean>(false);
+    const [categoryAnchorEl, setCategoryAnchorEl] = useState<HTMLElement | null>(null);
+
+    const isCategoryMenuOpen = Boolean(categoryAnchorEl);
 
     useEffect(() => {
+        let isMounted = true;
+
         const fetchCategories = async () => {
             setIsLoadingCategories(true);
             try {
                 const response = await get<ApiResponse<Category[]>>("/categories");
-
-                if (response.success) {
+                if (isMounted && response.success) {
                     setCategories(response.data);
                 }
             } catch (error) {
-                console.error("Failed to fetch categories:", error);
+                if (isMounted) {
+                    console.error("Failed to fetch categories:", error);
+                }
             } finally {
-                setIsLoadingCategories(false);
+                if (isMounted) {
+                    setIsLoadingCategories(false);
+                }
             }
         };
 
         fetchCategories();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
-    const handleOpenRootCategories = (event: MouseEvent<HTMLElement>) => {
+    const handleOpenRootCategories = useCallback((event: MouseEvent<HTMLElement>) => {
         setCategoryAnchorEl(event.currentTarget);
-    };
+    }, []);
 
-    const handleCloseRootCategories = () => {
+    const handleCloseRootCategories = useCallback(() => {
         setCategoryAnchorEl(null);
-    };
+    }, []);
 
     return (
         <AppBar position="sticky" sx={appBarSx}>
@@ -77,26 +89,37 @@ export default function Navbar() {
                     <MenuIcon />
                 </IconButton>
 
-                <Typography variant="h5" component={Link} to="/" sx={logoSx}>
+                <Typography variant="h5" component={RouterLink} to="/" sx={logoSx}>
                     SEEK WITH SIGHT
                 </Typography>
 
-                {/* Categories Dropdown */}
                 <Box
                     sx={{ display: { xs: "none", md: "block" } }}
                     onMouseEnter={handleOpenRootCategories}
                     onMouseLeave={handleCloseRootCategories}
                 >
                     <Button
+                        id="category-button"
                         color="inherit"
-                        endIcon={<ArrowDownIcon />}
+                        endIcon={
+                            isLoadingCategories ? (
+                                <CircularProgress size={16} color="inherit" />
+                            ) : (
+                                <ArrowDownIcon />
+                            )
+                        }
                         disabled={isLoadingCategories}
+                        aria-controls={isCategoryMenuOpen ? "category-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={isCategoryMenuOpen}
                     >
-                        {isLoadingCategories ? <CircularProgress size={20} /> : "Categories"}
+                        Categories
                     </Button>
+
                     <Menu
+                        id="category-menu"
                         anchorEl={categoryAnchorEl}
-                        open={Boolean(categoryAnchorEl)}
+                        open={isCategoryMenuOpen}
                         onClose={handleCloseRootCategories}
                         disablePortal
                         sx={{ pointerEvents: "none" }}
@@ -109,7 +132,7 @@ export default function Navbar() {
                             },
                         }}
                     >
-                        {categories.length === 0 && !isLoadingCategories && (
+                        {!isLoadingCategories && categories.length === 0 && (
                             <MenuItem disabled>No categories found</MenuItem>
                         )}
 
@@ -127,7 +150,7 @@ export default function Navbar() {
                     <SearchIcon color="action" />
                     <InputBase
                         placeholder="Search products, brands and categories..."
-                        inputProps={{ "aria-label": "search" }}
+                        inputProps={{ "aria-label": "search products, brands and categories" }}
                         sx={searchInputSx}
                     />
                 </Box>

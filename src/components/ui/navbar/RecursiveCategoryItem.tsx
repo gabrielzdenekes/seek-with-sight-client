@@ -1,42 +1,48 @@
-import { useState, type MouseEvent } from "react";
+import { useState, useMemo, useCallback, type MouseEvent } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { KeyboardArrowRight as ArrowRightIcon } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+
 import type { Category } from "@/components/ui/navbar/types";
-import {
-    nestedMenuItemSx,
-} from "./styles";
+import { nestedMenuItemSx } from "./styles";
+
+interface RecursiveCategoryItemProps {
+    category: Category;
+    closeParentMenu: () => void;
+}
 
 export default function RecursiveCategoryItem({
     category,
     closeParentMenu,
-}: {
-    category: Category;
-    closeParentMenu: () => void;
-}) {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const hasChildren = category.children && category.children.length > 0;
+}: RecursiveCategoryItemProps) {
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-    const handleMouseEnter = (event: MouseEvent<HTMLElement>) => {
-        if (hasChildren) {
-            setAnchorEl(event.currentTarget);
-        }
-    };
+    const children = useMemo(() => category.children ?? [], [category.children]);
+    const hasChildren = children.length > 0;
+    const isMenuOpen = Boolean(anchorEl);
 
-    const handleMouseLeave = () => {
+    const handleMouseEnter = useCallback(
+        (event: MouseEvent<HTMLElement>) => {
+            if (hasChildren) {
+                setAnchorEl(event.currentTarget);
+            }
+        },
+        [hasChildren]
+    );
+
+    const handleMouseLeave = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, []);
 
-    const handleFinalSelection = () => {
+    const handleCloseAll = useCallback(() => {
         setAnchorEl(null);
         closeParentMenu();
-    };
+    }, [closeParentMenu]);
 
     if (!hasChildren) {
         return (
             <MenuItem
-                component={Link}
+                component={RouterLink}
                 to={`/category/${category.slug}`}
                 onClick={closeParentMenu}
             >
@@ -46,15 +52,26 @@ export default function RecursiveCategoryItem({
     }
 
     return (
-        <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <MenuItem sx={nestedMenuItemSx}>
-                {category.name}
+        <Box
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            role="none"
+        >
+            <MenuItem
+                component={category.slug ? RouterLink : "li"}
+                to={category.slug ? `/category/${category.slug}` : undefined}
+                onClick={handleCloseAll}
+                sx={nestedMenuItemSx}
+                aria-haspopup="true"
+                aria-expanded={isMenuOpen}
+            >
+                <span>{category.name}</span>
                 <ArrowRightIcon fontSize="small" color="action" />
             </MenuItem>
 
             <Menu
                 anchorEl={anchorEl}
-                open={open}
+                open={isMenuOpen}
                 onClose={handleMouseLeave}
                 disablePortal
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -64,11 +81,11 @@ export default function RecursiveCategoryItem({
                     paper: { sx: { pointerEvents: "auto" } },
                 }}
             >
-                {category.children!.map((child) => (
+                {children.map((child) => (
                     <RecursiveCategoryItem
                         key={child.id}
                         category={child}
-                        closeParentMenu={handleFinalSelection}
+                        closeParentMenu={handleCloseAll}
                     />
                 ))}
             </Menu>
