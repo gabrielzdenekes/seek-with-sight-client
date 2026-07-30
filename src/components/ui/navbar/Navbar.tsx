@@ -18,6 +18,7 @@ import {
     AccountCircle as AccountIcon,
     Menu as MenuIcon,
     KeyboardArrowDown as ArrowDownIcon,
+    KeyboardArrowRight as ArrowRightIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import type { Category } from "@/components/ui/navbar/types";
@@ -28,9 +29,79 @@ import {
     searchContainerSx,
     searchInputSx,
     actionsContainerSx,
-} from "@/components/ui/navbar/styles";
+    nestedMenuItemSx,
+} from "./styles";
 import { get } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
+
+function RecursiveCategoryItem({
+    category,
+    closeParentMenu,
+}: {
+    category: Category;
+    closeParentMenu: () => void;
+}) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const hasChildren = category.children && category.children.length > 0;
+
+    const handleSubMenuClick = (event: MouseEvent<HTMLElement>) => {
+        if (hasChildren) {
+            event.stopPropagation(); // Prevent closing parent menus
+            setAnchorEl(event.currentTarget);
+        } else {
+            closeParentMenu();
+        }
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleFinalSelection = () => {
+        setAnchorEl(null);
+        closeParentMenu(); // Cascade the close command all the way up the tree
+    };
+
+    if (!hasChildren) {
+        return (
+            <MenuItem
+                component={Link}
+                to={`/category/${category.slug}`}
+                onClick={closeParentMenu}
+            >
+                {category.name}
+            </MenuItem>
+        );
+    }
+
+    return (
+        <>
+            <MenuItem onClick={handleSubMenuClick} sx={nestedMenuItemSx}>
+                {category.name}
+                <ArrowRightIcon fontSize="small" color="action" />
+            </MenuItem>
+
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                /* Positions the child menu to the right of the parent item */
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "left" }}
+            >
+                {category.children!.map((child) => (
+                    <RecursiveCategoryItem
+                        key={child.id}
+                        category={child}
+                        closeParentMenu={handleFinalSelection}
+                    />
+                ))}
+            </Menu>
+        </>
+    );
+}
+
 
 export default function Navbar() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -44,7 +115,7 @@ export default function Navbar() {
         const fetchCategories = async () => {
             setIsLoadingCategories(true);
             try {
-                const response = await get<ApiResponse<Category[]>>("/api/categories");
+                const response = await get<ApiResponse<Category[]>>("/categories");
 
                 if (response.success) {
                     setCategories(response.data);
@@ -59,11 +130,11 @@ export default function Navbar() {
         fetchCategories();
     }, []);
 
-    const handleOpenCategories = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleOpenRootCategories = (event: MouseEvent<HTMLButtonElement>) => {
         setCategoryAnchorEl(event.currentTarget);
     };
 
-    const handleCloseCategories = () => {
+    const handleCloseRootCategories = () => {
         setCategoryAnchorEl(null);
     };
 
@@ -79,19 +150,15 @@ export default function Navbar() {
                     <MenuIcon />
                 </IconButton>
 
-                <Typography
-                    variant="h5"
-                    component={Link}
-                    to="/"
-                    sx={logoSx}
-                >
-                    Seek With Sight
+                <Typography variant="h5" component={Link} to="/" sx={logoSx}>
+                    E-STORE
                 </Typography>
 
+                {/* Categories Dropdown */}
                 <Box sx={{ display: { xs: "none", md: "block" } }}>
                     <Button
                         color="inherit"
-                        onClick={handleOpenCategories}
+                        onClick={handleOpenRootCategories}
                         endIcon={<ArrowDownIcon />}
                         disabled={isLoadingCategories}
                     >
@@ -100,7 +167,7 @@ export default function Navbar() {
                     <Menu
                         anchorEl={categoryAnchorEl}
                         open={Boolean(categoryAnchorEl)}
-                        onClose={handleCloseCategories}
+                        onClose={handleCloseRootCategories}
                         slotProps={{
                             list: {
                                 "aria-labelledby": "category-button",
@@ -110,15 +177,13 @@ export default function Navbar() {
                         {categories.length === 0 && !isLoadingCategories && (
                             <MenuItem disabled>No categories found</MenuItem>
                         )}
+
                         {categories.map((category) => (
-                            <MenuItem
+                            <RecursiveCategoryItem
                                 key={category.id}
-                                component={Link}
-                                to={`/category/${category.slug}`}
-                                onClick={handleCloseCategories}
-                            >
-                                {category.name}
-                            </MenuItem>
+                                category={category}
+                                closeParentMenu={handleCloseRootCategories}
+                            />
                         ))}
                     </Menu>
                 </Box>

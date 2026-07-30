@@ -46,3 +46,10 @@ export const actionsContainerSx = {
     alignItems: "center",
     gap: { xs: 1, md: 2 },
 };
+
+export const nestedMenuItemSx = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 2,
+};
