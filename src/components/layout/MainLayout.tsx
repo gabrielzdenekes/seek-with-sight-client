@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/ui/Navbar";
+import Navbar from "@/components/ui/navbar/Navbar";
 import { Box, Container, Typography } from "@mui/material";
 
 const MainLayout = () => {
