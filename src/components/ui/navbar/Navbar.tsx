@@ -45,22 +45,19 @@ function RecursiveCategoryItem({
     const open = Boolean(anchorEl);
     const hasChildren = category.children && category.children.length > 0;
 
-    const handleSubMenuClick = (event: MouseEvent<HTMLElement>) => {
+    const handleMouseEnter = (event: MouseEvent<HTMLElement>) => {
         if (hasChildren) {
-            event.stopPropagation(); // Prevent closing parent menus
             setAnchorEl(event.currentTarget);
-        } else {
-            closeParentMenu();
         }
     };
 
-    const handleClose = () => {
+    const handleMouseLeave = () => {
         setAnchorEl(null);
     };
 
     const handleFinalSelection = () => {
         setAnchorEl(null);
-        closeParentMenu(); // Cascade the close command all the way up the tree
+        closeParentMenu();
     };
 
     if (!hasChildren) {
@@ -76,8 +73,8 @@ function RecursiveCategoryItem({
     }
 
     return (
-        <>
-            <MenuItem onClick={handleSubMenuClick} sx={nestedMenuItemSx}>
+        <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <MenuItem sx={nestedMenuItemSx}>
                 {category.name}
                 <ArrowRightIcon fontSize="small" color="action" />
             </MenuItem>
@@ -85,10 +82,14 @@ function RecursiveCategoryItem({
             <Menu
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
-                /* Positions the child menu to the right of the parent item */
+                onClose={handleMouseLeave}
+                disablePortal
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
+                sx={{ pointerEvents: "none" }}
+                slotProps={{
+                    paper: { sx: { pointerEvents: "auto" } },
+                }}
             >
                 {category.children!.map((child) => (
                     <RecursiveCategoryItem
@@ -98,19 +99,15 @@ function RecursiveCategoryItem({
                     />
                 ))}
             </Menu>
-        </>
+        </Box>
     );
 }
-
 
 export default function Navbar() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoadingCategories, setIsLoadingCategories] = useState(false);
     const [categoryAnchorEl, setCategoryAnchorEl] = useState<null | HTMLElement>(null);
 
-    /*
-     * TODO: tanstack query
-     */
     useEffect(() => {
         const fetchCategories = async () => {
             setIsLoadingCategories(true);
@@ -130,7 +127,7 @@ export default function Navbar() {
         fetchCategories();
     }, []);
 
-    const handleOpenRootCategories = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleOpenRootCategories = (event: MouseEvent<HTMLElement>) => {
         setCategoryAnchorEl(event.currentTarget);
     };
 
@@ -151,14 +148,17 @@ export default function Navbar() {
                 </IconButton>
 
                 <Typography variant="h5" component={Link} to="/" sx={logoSx}>
-                    E-STORE
+                    SEEK WITH SIGHT
                 </Typography>
 
                 {/* Categories Dropdown */}
-                <Box sx={{ display: { xs: "none", md: "block" } }}>
+                <Box
+                    sx={{ display: { xs: "none", md: "block" } }}
+                    onMouseEnter={handleOpenRootCategories}
+                    onMouseLeave={handleCloseRootCategories}
+                >
                     <Button
                         color="inherit"
-                        onClick={handleOpenRootCategories}
                         endIcon={<ArrowDownIcon />}
                         disabled={isLoadingCategories}
                     >
@@ -168,7 +168,12 @@ export default function Navbar() {
                         anchorEl={categoryAnchorEl}
                         open={Boolean(categoryAnchorEl)}
                         onClose={handleCloseRootCategories}
+                        disablePortal
+                        sx={{ pointerEvents: "none" }}
                         slotProps={{
+                            paper: {
+                                sx: { pointerEvents: "auto" },
+                            },
                             list: {
                                 "aria-labelledby": "category-button",
                             },
