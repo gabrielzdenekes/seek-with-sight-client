@@ -1,4 +1,5 @@
-import type { SxProps, Theme } from "@mui/material";
+import type { Theme } from "@mui/material/styles";
+import type { SxProps } from "@mui/system";
 
 export const authContainerSx: SxProps<Theme> = {
     minHeight: "100vh",
