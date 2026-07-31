@@ -18,12 +18,14 @@ import {
 } from "@/pages/auth/auth-fortm/styles";
 import GenericForm from "@/components/ui/form/GenericForm";
 import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
+import type { FieldConfig } from "@/components/ui/form/field.types";
+import type { ZodObject } from "zod";
 
 export interface AuthFormProps {
     titleKey: string;
     subtitleKey: string;
-    fields: any[];
-    schema: any;
+    fields: FieldConfig[];
+    schema: ZodObject;
     action: (payload: any) => Promise<any>;
     submitLabelKey: string;
     onSuccess?: () => void;
