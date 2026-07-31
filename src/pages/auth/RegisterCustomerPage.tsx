@@ -1,28 +1,15 @@
 import {
     Box,
-    Card,
-    CardContent,
     Typography,
-    Button,
-    Divider,
-    Link,
-    Alert
-} from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+    Link} from "@mui/material";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
 import { RegisterCustomerSchema } from "@/features/auth/schemas/register-customer-schema";
 import { useTranslation } from "react-i18next";
-import {
-    authContainerSx,
-    authCardSx,
-    roundedInputSx
-} from "./styles";
-import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
-import GenericForm from "@/components/ui/form/GenericForm";
-import { useState } from "react";
+import type { FieldConfig } from "@/components/ui/form/field.types";
+import AuthForm from "@/pages/auth/auth-fortm/AuthForm";
 
-const REGISTER_FIELD_ROWS = [
+const REGISTER_FIELD_ROWS: FieldConfig[] = [
     { name: "firstName", labelKey: "common.fields.firstName", type: "text", autoComplete: "given-name" },
     { name: "lastName", labelKey: "common.fields.lastName", type: "text", autoComplete: "family-name" },
     { name: "phone", labelKey: "common.fields.phone", type: "tel", autoComplete: "tel" },
@@ -34,111 +21,52 @@ const REGISTER_FIELD_ROWS = [
 export default function RegisterCustomerPage() {
     const { t } = useTranslation();
     const { registerCustomer } = useAuth();
-    const [registerSuccess, setRegisterSuccess] = useState(false);
 
-    function onRegisterSuccess() {
-        setRegisterSuccess(true);
-    }
+    const formFooter = (
+        <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography variant="body2" sx={{ color: "text.primary" }}>
+                {t("register.hasAccountPrompt")}{" "}
+                <Link
+                    component={RouterLink}
+                    to="/login"
+                    underline="hover"
+                    sx={{ color: "primary.main", fontWeight: 500 }}
+                >
+                    {t("register.loginLink")}
+                </Link>
+            </Typography>
+
+            <Typography variant="body2" sx={{ color: "text.primary" }}>
+                {t("register.customer.sellerPrompt")}{" "}
+                <Link
+                    component={RouterLink}
+                    to="/register/seller"
+                    underline="hover"
+                    sx={{ color: "primary.main", fontWeight: 500 }}
+                >
+                    {t("register.customer.sellerLink")}
+                </Link>
+            </Typography>
+        </Box>
+    );
 
     return (
-        <Box sx={authContainerSx}>
-            <Box
-                component="img"
-                src="/logo.png"
-                alt={t("common.logoAlt")}
-                sx={{
-                    width: "100%",
-                    maxWidth: 420,
-                    height: 120,
-                    objectFit: "contain",
-                    mb: 2,
-                }}
-            />
-
-            <Card sx={authCardSx}>
-                <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
-                    {registerSuccess ? (
-                        <Box sx={{ py: 3, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
-
-                            <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 500, mb: 2 }}>
-                                {t("register.successTitle")}
-                            </Typography>
-
-                            <Alert severity="success" sx={{ mb: 4, borderRadius: 2, textAlign: "left" }}>
-                                {t("register.customer.verifyEmailMessage")}
-                            </Alert>
-
-                            <Button
-                                component={RouterLink}
-                                to="/login"
-                                variant="contained"
-                                fullWidth
-                                disableElevation
-                                sx={{ py: 1.2, borderRadius: 2 }}
-                            >
-                                {t("register.customer.goToLogin")}
-                            </Button>
-                        </Box>
-                    ) : (
-                        <>
-                            <Typography variant="h4" sx={{ color: "text.secondary", fontWeight: 300, mb: 3 }}>
-                                {t("register.customer.title")}
-                            </Typography>
-
-                            <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 3 }}>
-                                {t("register.subtitle")}
-                            </Typography>
-
-                            <GenericForm
-                                fields={REGISTER_FIELD_ROWS}
-                                schema={RegisterCustomerSchema}
-                                action={registerCustomer}
-                                submitLabelKey="register.submit"
-                                inputSx={roundedInputSx}
-                                onFormSuccess={onRegisterSuccess}>
-
-                                <Box sx={{ mt: 2, mb: 3, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-                                    <Typography variant="body2" sx={{ color: "text.primary" }}>
-                                        {t("register.hasAccountPrompt")}{" "}
-                                        <Link
-                                            component={RouterLink}
-                                            to="/login"
-                                            underline="hover"
-                                            sx={{ color: "primary.main", fontWeight: 500 }}
-                                        >
-                                            {t("register.loginLink")}
-                                        </Link>
-                                    </Typography>
-
-                                    <Typography variant="body2" sx={{ color: "text.primary" }}>
-                                        {t("register.customer.sellerPrompt")}{" "}
-                                        <Link
-                                            component={RouterLink}
-                                            to="/register/seller"
-                                            underline="hover"
-                                            sx={{ color: "primary.main", fontWeight: 500 }}
-                                        >
-                                            {t("register.customer.sellerLink")}
-                                        </Link>
-                                    </Typography>
-                                </Box>
-                            </GenericForm>
-
-
-                            <Divider sx={{ mb: 1, color: "text.secondary" }}>
-                                {t("common.or")}
-                            </Divider>
-
-                            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-                                {t("register.socialPrompt")}
-                            </Typography>
-
-                            <SocialProviders />
-                        </>
-                    )}
-                </CardContent>
-            </Card>
-        </Box>
+        <AuthForm
+            titleKey="register.customer.title"
+            subtitleKey="register.subtitle"
+            fields={REGISTER_FIELD_ROWS}
+            schema={RegisterCustomerSchema}
+            action={registerCustomer}
+            submitLabelKey="register.submit"
+            successOptions={{
+                titleKey: "register.successTitle",
+                messageKey: "register.customer.verifyEmailMessage",
+                buttonTextKey: "register.customer.goToLogin",
+                buttonLink: "/login"
+            }}
+            formFooter={formFooter}
+            showSocial={true}
+            socialPromptKey="register.socialPrompt"
+        />
     );
 }
