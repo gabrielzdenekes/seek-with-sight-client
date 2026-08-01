@@ -9,13 +9,14 @@ import RegisterCustomerPage from "@/pages/auth/RegisterCustomerPage";
 import RegisterSellerPage from "@/pages/auth/RegisterSellerPage";
 import { ProtectedRoute } from "@/features/auth/guards/ProtectedRoute";
 import { PublicRoute } from "@/features/auth/guards/PublicRoute";
+import MainViewContainer from "@/features/products/landing/MainView";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
         children: [
-            { index: true, element: <HomePage /> },
+            { index: true, element: <MainViewContainer /> },
             { path: "products", element: <ProductListPage /> },
             { path: "products/:id", element: <ProductDetailsPage /> },
         ],
