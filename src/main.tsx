@@ -14,6 +14,9 @@ import { AuthProvider } from "@/features/auth/context/AuthContext";
 import { AuthInterceptor } from "@/features/auth/components/AuthInterceptor";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { appConfig } from "./config";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const theme = createTheme({
     palette: {
@@ -23,15 +26,18 @@ const theme = createTheme({
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <GoogleOAuthProvider clientId={appConfig.authProviders.google.clientId}>
-            <AuthProvider>
-                <AuthInterceptor>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <App />
-                    </ThemeProvider>
-                </AuthInterceptor>
-            </AuthProvider>
-        </GoogleOAuthProvider>
+        <QueryClientProvider client={queryClient}>
+            <GoogleOAuthProvider clientId={appConfig.authProviders.google.clientId}>
+                <AuthProvider>
+                    <AuthInterceptor>
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline />
+                            <App />
+                            <ReactQueryDevtools initialIsOpen={false} />
+                        </ThemeProvider>
+                    </AuthInterceptor>
+                </AuthProvider>
+            </GoogleOAuthProvider>
+        </QueryClientProvider>
     </StrictMode>
 );

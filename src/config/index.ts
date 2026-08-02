@@ -8,6 +8,12 @@ export interface AppConfig {
         google: {
             clientId: string
         }
+    },
+    query: {
+        staleTimeMs: number;
+        gcTimeMs: number;
+        refetchOnWindowFocus: boolean;
+        retryCount: number;
     }
 };
 
@@ -24,6 +30,12 @@ export const appConfig: Readonly<AppConfig> = Object.freeze<AppConfig>(
             google: {
                 clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
             }
+        },
+        query: {
+            staleTimeMs: 1000 * 60 * 5, // 5 mins
+            gcTimeMs: 1000 * 60 * 15, // 15 mins
+            refetchOnWindowFocus: false,
+            retryCount: 2
         }
     }
 );
