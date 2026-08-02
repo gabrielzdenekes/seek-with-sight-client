@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type MouseEvent } from "react";
+import { useState, useCallback, type MouseEvent } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
     AppBar,
@@ -33,41 +33,22 @@ import {
     searchInputSx,
     actionsContainerSx,
 } from "./styles";
+import { useQuery } from "@tanstack/react-query";
+
+async function fetchCategories(): Promise<Category[]> {
+    const response = await get<ApiResponse<Category[]>>("/categories");
+
+    return response.data;
+}
 
 export default function Navbar() {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [isLoadingCategories, setIsLoadingCategories] = useState<boolean>(false);
     const [categoryAnchorEl, setCategoryAnchorEl] = useState<HTMLElement | null>(null);
-
     const isCategoryMenuOpen = Boolean(categoryAnchorEl);
 
-    useEffect(() => {
-        let isMounted = true;
-
-        const fetchCategories = async () => {
-            setIsLoadingCategories(true);
-            try {
-                const response = await get<ApiResponse<Category[]>>("/categories");
-                if (isMounted && response.success) {
-                    setCategories(response.data);
-                }
-            } catch (error) {
-                if (isMounted) {
-                    console.error("Failed to fetch categories:", error);
-                }
-            } finally {
-                if (isMounted) {
-                    setIsLoadingCategories(false);
-                }
-            }
-        };
-
-        fetchCategories();
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
+    const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
+        queryKey: ["categories"],
+        queryFn: fetchCategories
+    });
 
     const handleOpenRootCategories = useCallback((event: MouseEvent<HTMLElement>) => {
         setCategoryAnchorEl(event.currentTarget);
