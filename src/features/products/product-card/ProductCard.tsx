@@ -1,13 +1,33 @@
-import { StyledCard, StyledActionArea, ImageContainer, StyledCardMedia, BadgeChip } from "@/features/products/landing/product-card/styles";
-import type { ProductCardDisplayData } from "@/features/products/landing/product-card/types";
+import { StyledCard, StyledActionArea, ImageContainer, StyledCardMedia, BadgeChip, StyledStarIcon, RatingChip } from "@/features/products/product-card/styles";
+import type { ProductCardDisplayData } from "@/features/products/product-card/types";
 import { CardContent, Typography, Box } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
 interface ProductCardProps {
     product: ProductCardDisplayData;
 }
+
+const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(amount);
+
 export default function ProductCard({ product }: ProductCardProps) {
-    const hasDiscount = product.discountPercentage !== undefined && product.discountPercentage > 0;
+    const {
+        name,
+        imageUrl,
+        discountPercentage,
+        rating,
+        variantTitle,
+        totalSold,
+        price,
+        salePrice,
+    } = product;
+
+    const hasDiscount = Boolean(discountPercentage && discountPercentage > 0);
+    const isOnSale = Boolean(salePrice && salePrice < price);
+    const displayPrice = salePrice ?? price;
 
     return (
         <StyledCard elevation={0}>
@@ -15,21 +35,22 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <ImageContainer>
                     <StyledCardMedia
                         component="img"
-                        image={product.imageUrl || "/placeholder.png"}
+                        src={imageUrl || "/placeholder.png"}
+                        alt={name}
                     />
 
                     {hasDiscount && (
                         <BadgeChip
-                            label={`-${product.discountPercentage}%`}
+                            label={`-${discountPercentage}%`}
                             color="error"
                             size="small"
                         />
                     )}
 
-                    {product.rating !== undefined && (
-                        <BadgeChip
-                            icon={<StarIcon sx={{ color: "#faaf00 !important" }} />}
-                            label={`${product.rating}`}
+                    {rating !== undefined && (
+                        <RatingChip
+                            icon={<StyledStarIcon />}
+                            label={`${rating}`}
                             size="small"
                             sx={{ backgroundColor: "background.paper" }}
                         />
@@ -37,30 +58,30 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </ImageContainer>
 
                 <CardContent sx={{ px: 0, py: 1.5, flexGrow: 1 }}>
-                    <Typography variant="subtitle2" color="text.primary" noWrap title={product.name}>
-                        {product.name}
+                    <Typography variant="subtitle2" color="text.primary" noWrap title={name}>
+                        {name}
                     </Typography>
 
-                    {product.variantTitle && (
+                    {variantTitle && (
                         <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
-                            {product.variantTitle}
+                            {variantTitle}
                         </Typography>
                     )}
 
-                    {product.totalSold !== undefined && (
+                    {totalSold !== undefined && (
                         <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
-                            {`${product.totalSold} sold`}
+                            {totalSold} sold
                         </Typography>
                     )}
 
                     <Box sx={{ display: "flex", alignItems: "baseline", gap: 1, mt: 0.5 }}>
                         <Typography variant="h6" component="span" sx={{ fontWeight: "bold" }}>
-                            {`$${(product.salePrice ?? product.price).toFixed(2)}`}
+                            {formatCurrency(displayPrice)}
                         </Typography>
 
-                        {product.salePrice && product.salePrice < product.price && (
+                        {isOnSale && (
                             <Typography variant="body2" color="text.disabled" sx={{ textDecoration: "line-through" }}>
-                                ${product.price.toFixed(2)}
+                                {formatCurrency(price)}
                             </Typography>
                         )}
                     </Box>

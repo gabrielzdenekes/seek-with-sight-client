@@ -1,15 +1,17 @@
-import ProductSkeleton from "@/features/products/landing/ProductSkeleton";
-import ProductsLanding from "@/features/products/landing/ProductsLanding";
+import ProductSkeleton from "@/features/products/product-skeleton/ProductSkeleton";
+import LandingProducts from "@/features/products/landing/LandingProducts";
 import type { LandingProductsData } from "@/features/products/landing/types";
 import { get } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
 import { Container, Stack, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-export default function MainViewContainer() {
+export default function LandingProductsContainer() {
     const [data, setData] = useState<LandingProductsData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         let isMounted = true;
@@ -18,18 +20,19 @@ export default function MainViewContainer() {
             try {
                 setLoading(true);
                 setError(null);
+
                 const response = await get<ApiResponse<LandingProductsData>>("/products/landing");
 
                 if (isMounted) {
                     if (response.success && response.data) {
                         setData(response.data);
                     } else {
-                        setError(response.message || "Failed to load products");
+                        setError("products.loadFailed");
                     }
                 }
-            } catch (err) {
+            } catch {
                 if (isMounted) {
-                    setError(err instanceof Error ? err.message : "An unexpected error occurred");
+                    setError("products.loadFailed");
                 }
             } finally {
                 if (isMounted) {
@@ -61,7 +64,7 @@ export default function MainViewContainer() {
     if (error) {
         return (
             <Container maxWidth="lg" sx={{ py: 6 }}>
-                <Alert severity="error">{error}</Alert>
+                <Alert severity="error">{ t(error) }</Alert>
             </Container>
         );
     }
@@ -70,5 +73,5 @@ export default function MainViewContainer() {
         return null;
     }
 
-    return <ProductsLanding data={data} />;
+    return <LandingProducts data={data} />;
 }

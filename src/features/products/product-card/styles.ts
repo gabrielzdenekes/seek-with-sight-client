@@ -1,4 +1,5 @@
-import { Box, Card, CardActionArea, CardMedia, Chip, styled } from "@mui/material";
+import { Box, Card, CardActionArea, CardMedia, Chip, styled, type CardMediaProps } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
 
 export const StyledCard = styled(Card)({
     backgroundColor: "transparent",
@@ -27,7 +28,7 @@ export const ImageContainer = styled(Box)(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
 }));
 
-export const StyledCardMedia = styled(CardMedia)<{ component?: string }>({
+export const StyledCardMedia = styled(CardMedia)<CardMediaProps<"img">>({
     height: "100%",
     objectFit: "cover",
     transition: "transform 0.3s ease",
@@ -39,3 +40,11 @@ export const BadgeChip = styled(Chip)({
     left: 8,
     fontWeight: "bold",
 });
+
+export const StyledStarIcon = styled(StarIcon)(({ theme }) => ({
+    color: theme.palette.warning.main,
+}));
+
+export const RatingChip = styled(BadgeChip)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+}));

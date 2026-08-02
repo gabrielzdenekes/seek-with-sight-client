@@ -1,8 +1,13 @@
-import type { ProductCardDisplayData } from "@/features/products/landing/product-card/types";
-import ProductSection from "@/features/products/landing/product-section/ProductSection";
+import type { ProductCardDisplayData } from "@/features/products/product-card/types";
+import ProductSection from "@/features/products/product-section/ProductSection";
 import { SectionStack, StyledMainContainer } from "@/features/products/landing/styles";
-import type { BestReviewedProduct, BestSellingProduct, LandingProductsData, NewArrivalProduct, OnSaleProduct } from "@/features/products/landing/types";
-
+import type {
+    BestReviewedProduct,
+    BestSellingProduct,
+    LandingProductsData,
+    NewArrivalProduct,
+    OnSaleProduct
+} from "@/features/products/landing/types";
 
 interface MainViewProps {
     data: LandingProductsData;
@@ -47,7 +52,7 @@ const mapBestReviewed = (item: BestReviewedProduct): ProductCardDisplayData => (
     reviewCount: item.reviewCount,
 });
 
-export default function ProductsLanding({ data }: MainViewProps) {
+export default function LandingProducts({ data }: MainViewProps) {
     const onSaleProducts = data.onSale.map(mapOnSale);
     const newArrivalProducts = data.newArrivals.map(mapNewArrival);
     const bestSellingProducts = data.bestSelling.map(mapBestSelling);

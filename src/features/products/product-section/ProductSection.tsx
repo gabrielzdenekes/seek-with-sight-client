@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Grid } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ProductCard from "@/features/products/landing/product-card/ProductCard";
-import type { ProductCardDisplayData } from "@/features/products/landing/product-card/types";
+import ProductCard from "@/features/products/product-card/ProductCard";
+import type { ProductCardDisplayData } from "@/features/products/product-card/types";
 
 interface ProductSectionProps {
     title: string;
