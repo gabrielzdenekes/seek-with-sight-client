@@ -28,7 +28,7 @@ const MainLayout = () => {
             >
                 <Container maxWidth="lg">
                     <Typography variant="body2" color="text.secondary" align="center">
-                        &copy; {new Date().getFullYear()} ShopBack E-Commerce. All rights reserved.
+                        &copy; {new Date().getFullYear()} Seek With Sight E-Commerce. All rights reserved.
                     </Typography>
                 </Container>
             </Box>

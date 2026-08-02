@@ -1,5 +1,7 @@
-const HomePage = () => {
-    return <h1>Home</h1>;
-};
+import LandingProductsContainer from "@/features/products/landing/LandingProductsContainer";
 
-export default HomePage;
+export default function HomePage() {
+    return <>
+        <LandingProductsContainer />
+    </>;
+};

@@ -67,6 +67,9 @@
             "goToLogin": "Go to Login"
         }
     },
+    "products": {
+        "loadFailed": "Failed to load products"
+    },
     "apiErrors": {
         "unauthorized": "Access denied. Your session may have expired, or you lack the required clearance to view this resource."
     }
