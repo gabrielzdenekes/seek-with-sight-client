@@ -1,7 +1,6 @@
 import { StyledCard, StyledActionArea, ImageContainer, StyledCardMedia, BadgeChip, StyledStarIcon, RatingChip } from "@/features/products/product-card/styles";
 import type { ProductCardDisplayData } from "@/features/products/product-card/types";
 import { CardContent, Typography, Box } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
 
 interface ProductCardProps {
     product: ProductCardDisplayData;
