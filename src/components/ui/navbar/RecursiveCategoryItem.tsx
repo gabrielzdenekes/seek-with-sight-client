@@ -4,7 +4,7 @@ import { Box, Menu, MenuItem } from "@mui/material";
 import { KeyboardArrowRight as ArrowRightIcon } from "@mui/icons-material";
 
 import { nestedMenuItemSx } from "./styles";
-import type { Category } from "@/features/categories/category-types";
+import type { Category } from "@/features/categories/types";
 
 interface RecursiveCategoryItemProps {
     category: Category;

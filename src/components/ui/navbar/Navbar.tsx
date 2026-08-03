@@ -33,7 +33,7 @@ import {
     actionsContainerSx,
 } from "./styles";
 import { useQuery } from "@tanstack/react-query";
-import type { Category } from "@/features/categories/category-types";
+import type { Category } from "@/features/categories/types";
 
 async function fetchCategories(): Promise<Category[]> {
     const response = await get<ApiResponse<Category[]>>("/categories");
