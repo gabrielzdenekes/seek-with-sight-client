@@ -17,7 +17,7 @@ export const productSchema = z.object({
         .max(20000, "products.create.validation.descriptionMaxLength")
         .optional(),
 
-    status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED"]),
+    status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED", "OUT_OF_STOCK"]),
 
     categoryId: z.uuid("products.create.validation.categoryIdInvalid"),
 
