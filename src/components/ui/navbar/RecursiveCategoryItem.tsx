@@ -3,8 +3,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { KeyboardArrowRight as ArrowRightIcon } from "@mui/icons-material";
 
-import type { Category } from "@/components/ui/navbar/types";
 import { nestedMenuItemSx } from "./styles";
+import type { Category } from "@/features/categories/category-types";
 
 interface RecursiveCategoryItemProps {
     category: Category;

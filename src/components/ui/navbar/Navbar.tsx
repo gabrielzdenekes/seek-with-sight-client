@@ -22,7 +22,6 @@ import {
 } from "@mui/icons-material";
 
 import RecursiveCategoryItem from "@/components/ui/navbar/RecursiveCategoryItem";
-import type { Category } from "@/components/ui/navbar/types";
 import { get } from "@/shared/http";
 import type { ApiResponse } from "@/shared/types";
 import {
@@ -34,6 +33,7 @@ import {
     actionsContainerSx,
 } from "./styles";
 import { useQuery } from "@tanstack/react-query";
+import type { Category } from "@/features/categories/category-types";
 
 async function fetchCategories(): Promise<Category[]> {
     const response = await get<ApiResponse<Category[]>>("/categories");
