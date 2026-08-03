@@ -68,7 +68,24 @@
         }
     },
     "products": {
-        "loadFailed": "Failed to load products"
+        "loadFailed": "Failed to load products",
+        "products": {
+            "loadFailed": "Failed to load products",
+            "create": {
+                "validation": {
+                    "productNameMinLength": "Product name must be at least 2 characters",
+                    "productNameMaxLength": "Product name cannot exceed 300 characters",
+                    "slugMaxLength": "Slug cannot exceed 180 characters",
+                    "slugInvalidFormat": "Invalid slug format (e.g., my-product-name)",
+                    "shortDescriptionMaxLength": "Max 500 characters",
+                    "descriptionMaxLength": "Max 20000 characters",
+                    "categoryIdInvalid": "Please select a valid category",
+                    "brandIdInvalid": "Please select a valid brand",
+                    "priceMin": "Price cannot be negative",
+                    "quantityMin": "Minimum quantity is 1"
+                }
+            }
+        }
     },
     "apiErrors": {
         "unauthorized": "Access denied. Your session may have expired, or you lack the required clearance to view this resource."
