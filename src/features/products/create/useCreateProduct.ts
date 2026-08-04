@@ -18,12 +18,13 @@ async function uploadImages(product: Product, images: File[]) {
         const formData = new FormData();
         formData.append("file", img);
 
-        product = await post(`/products/${product.id}/images`, formData, {
+        product = (await post<ApiResponse<Product>>(`/products/${product.id}/images`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
-        });
+        })).data;
     }
+
     return product;
 }
 
