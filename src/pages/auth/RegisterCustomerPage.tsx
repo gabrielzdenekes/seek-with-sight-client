@@ -1,22 +1,25 @@
-import {
-    Box,
-    Typography,
-    Link} from "@mui/material";
+import { Box, Typography, Link } from "@mui/material";
 import { useAuth } from "@/features/auth/context/useAuth";
 import { Link as RouterLink } from "react-router-dom";
 import { RegisterCustomerSchema } from "@/features/auth/schemas/register-customer-schema";
 import { useTranslation } from "react-i18next";
-import type { FieldConfig } from "@/components/ui/form/field.types";
+import type { FormSectionDef } from "@/components/ui/form/form.types";
 import AuthForm from "@/pages/auth/auth-fortm/AuthForm";
 
-const REGISTER_FIELD_ROWS: FieldConfig[] = [
-    { name: "firstName", labelKey: "common.fields.firstName", type: "text", autoComplete: "given-name" },
-    { name: "lastName", labelKey: "common.fields.lastName", type: "text", autoComplete: "family-name" },
-    { name: "phone", labelKey: "common.fields.phone", type: "tel", autoComplete: "tel" },
-    { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
-    { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "new-password" },
-    { name: "confirmPassword", labelKey: "common.fields.confirmPassword", type: "password", autoComplete: "new-password" },
-] as const;
+const REGISTER_CUSTOMER_SECTIONS: FormSectionDef[] = [
+    {
+        id: "register-customer",
+        paperSx: { p: 0, mb: 0, boxShadow: "none", bgcolor: "transparent" },
+        fields: [
+            { name: "firstName", labelKey: "common.fields.firstName", type: "text", autoComplete: "given-name" },
+            { name: "lastName", labelKey: "common.fields.lastName", type: "text", autoComplete: "family-name" },
+            { name: "phone", labelKey: "common.fields.phone", type: "tel", autoComplete: "tel" },
+            { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
+            { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "new-password" },
+            { name: "confirmPassword", labelKey: "common.fields.confirmPassword", type: "password", autoComplete: "new-password" },
+        ],
+    },
+];
 
 export default function RegisterCustomerPage() {
     const { t } = useTranslation();
@@ -54,7 +57,7 @@ export default function RegisterCustomerPage() {
         <AuthForm
             titleKey="register.customer.title"
             subtitleKey="register.subtitle"
-            fields={REGISTER_FIELD_ROWS}
+            sections={REGISTER_CUSTOMER_SECTIONS}
             schema={RegisterCustomerSchema}
             action={registerCustomer}
             submitLabelKey="register.submit"
