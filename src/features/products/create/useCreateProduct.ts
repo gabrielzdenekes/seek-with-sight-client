@@ -23,6 +23,7 @@ async function uploadImages(product: Product, images: File[]) {
 export function useCreateProduct() {
     return useMutation({
         mutationFn: async ({ productData, images }: { productData: ProductFormValues, images: File[] }) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { images: _, ...payload } = productData;
             const productResponse = await post<ApiResponse<Product>>("/products", payload);
             let product = productResponse.data;
