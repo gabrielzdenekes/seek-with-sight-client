@@ -68,9 +68,52 @@
         }
     },
     "products": {
-        "loadFailed": "Failed to load products"
-    },
-    "apiErrors": {
-        "unauthorized": "Access denied. Your session may have expired, or you lack the required clearance to view this resource."
+        "loadFailed": "Failed to load products",
+        "create": {
+            "submit": "Save Product",
+            "sections": {
+                "basicInfo": "Basic Information",
+                "media": "Media",
+                "pricing": "Pricing & Inventory",
+                "status": "Status",
+                "organization": "Organization"
+            },
+            "fields": {
+                "productName": "Product Name",
+                "slug": "Slug (URL)",
+                "shortDescription": "Short Description",
+                "description": "Full Description",
+                "price": "Price",
+                "quantity": "Quantity",
+                "status": "Product Status",
+                "category": "Category",
+                "brand": "Brand"
+            },
+            "statusOptions": {
+                "active": "Active",
+                "draft": "Draft",
+                "archived": "Archived"
+            },
+            "media": {
+                "upload": "Upload Images",
+                "previewAlt": "Preview {{number}}",
+                "removeAria": "Remove preview image {{number}}"
+            },
+            "validation": {
+                "productNameMinLength": "Product name must be at least 2 characters",
+                "productNameMaxLength": "Product name cannot exceed 300 characters",
+                "slugMaxLength": "Slug cannot exceed 180 characters",
+                "slugInvalidFormat": "Invalid slug format (e.g., my-product-name)",
+                "shortDescriptionMaxLength": "Max 500 characters",
+                "descriptionMaxLength": "Max 20000 characters",
+                "categoryIdInvalid": "Please select a valid category",
+                "brandIdInvalid": "Please select a valid brand",
+                "priceMin": "Price cannot be negative",
+                "quantityMin": "Minimum quantity is 1"
+            }
+        },
+        "apiErrors": {
+            "unauthorized": "Access denied. Your session may have expired, or you lack the required clearance to view this resource."
+        }
     }
 }

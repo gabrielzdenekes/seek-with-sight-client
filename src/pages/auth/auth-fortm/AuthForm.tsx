@@ -1,31 +1,21 @@
 import { useState, type ReactNode } from "react";
-import {
-    Box,
-    Card,
-    CardContent,
-    Typography,
-    Button,
-    Divider,
-    Alert
-} from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import { useTranslation } from "react-i18next";
+import { Box, Card, CardContent, Typography, Divider, Button, Alert } from "@mui/material";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Link as RouterLink } from "react-router-dom";
-import {
-    authContainerSx,
-    authCardSx,
-    roundedInputSx
-} from "@/pages/auth/auth-fortm/styles";
-import GenericForm from "@/components/ui/form/GenericForm";
-import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
-import type { FieldConfig } from "@/components/ui/form/field.types";
+import { useTranslation } from "react-i18next";
 import type { ZodObject } from "zod";
+
+import GenericForm from "@/components/ui/form/GenericForm";
+import type { FormSectionDef } from "@/components/ui/form/form.types";
+
+import { authContainerSx, authCardSx, roundedInputSx } from "./styles";
+import SocialProviders from "@/features/auth/components/social-providers/SocialProviders";
 
 export interface AuthFormProps {
     titleKey: string;
     subtitleKey: string;
-    fields: FieldConfig[];
-    schema: ZodObject;
+    sections: FormSectionDef[];
+    schema: ZodObject<any, any>;
     action: (payload: any) => Promise<any>;
     submitLabelKey: string;
     onSuccess?: () => void;
@@ -43,7 +33,7 @@ export interface AuthFormProps {
 export default function AuthForm({
     titleKey,
     subtitleKey,
-    fields,
+    sections,
     schema,
     action,
     submitLabelKey,
@@ -85,13 +75,13 @@ export default function AuthForm({
                 <CardContent sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "center" }}>
                     {isSuccess && successOptions ? (
                         <Box sx={{ py: 3, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
+                            <CheckCircleOutlinedIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
 
                             <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 500, mb: 2 }}>
                                 {t(successOptions.titleKey)}
                             </Typography>
 
-                            <Alert severity="success" sx={{ mb: 4, borderRadius: 2, textAlign: "left" }}>
+                            <Alert severity="success" sx={{ mb: 4, borderRadius: 2, textAlign: "left", width: "100%" }}>
                                 {t(successOptions.messageKey)}
                             </Alert>
 
@@ -117,7 +107,7 @@ export default function AuthForm({
                             </Typography>
 
                             <GenericForm
-                                fields={fields}
+                                sections={sections}
                                 schema={schema}
                                 action={action}
                                 submitLabelKey={submitLabelKey}
