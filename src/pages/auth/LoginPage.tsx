@@ -4,12 +4,18 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LoginSchema } from "@/features/auth/schemas/login-schema";
 import AuthForm from "@/pages/auth/auth-fortm/AuthForm";
-import type { FieldConfig } from "@/components/ui/form/field.types";
+import type { FormSectionDef } from "@/components/ui/form/form.types";
 
-const LOGIN_FIELDS: FieldConfig[] = [
-    { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
-    { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "current-password" },
-] as const;
+const LOGIN_SECTIONS: FormSectionDef[] = [
+    {
+        id: "login-credentials",
+        paperSx: { p: 0, mb: 0, boxShadow: "none", bgcolor: "transparent" },
+        fields: [
+            { name: "email", labelKey: "common.fields.email", type: "email", autoComplete: "email" },
+            { name: "password", labelKey: "common.fields.password", type: "password", autoComplete: "current-password" },
+        ],
+    },
+];
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -31,7 +37,7 @@ export default function LoginPage() {
         <AuthForm
             titleKey="login.title"
             subtitleKey="login.subtitle"
-            fields={LOGIN_FIELDS}
+            sections={LOGIN_SECTIONS}
             schema={LoginSchema}
             action={login}
             submitLabelKey="login.submit"
