@@ -1,3 +1,5 @@
+import type { ProductImage } from "@/features/products/types";
+
 export interface ProductVariantRequest {
     title: string;
     sku: string;
@@ -5,16 +7,11 @@ export interface ProductVariantRequest {
     quantity: number;
 }
 
-export interface ImageResponse {
-    id: string;
-    url: string;
-}
-
 export interface ProductVariantResponse {
     id: string;
     title: string;
     sku: string;
-    images: ImageResponse[];
+    images: ProductImage[];
     salePrice?: number;
     saleStartDate?: string;
     saleEndDate?: string;
