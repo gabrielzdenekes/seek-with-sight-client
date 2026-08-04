@@ -30,7 +30,20 @@ export const productSchema = z.object({
         .int()
         .min(1, "products.create.validation.quantityMin"),
 
-    images: z.any().array().optional()
+    images: z.preprocess(
+        (val) => {
+            if (!val) {
+                return [];
+            }
+
+            if (Array.isArray(val)) {
+                return val;
+            }
+
+            return [val];
+        },
+        z.array(z.instanceof(File))
+    )
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

@@ -4,12 +4,12 @@ import type { ApiResponse } from "@/shared/types";
 import { useQuery } from "@tanstack/react-query";
 
 function searchCategories(searchTerm: string) {
-    return get<ApiResponse<CategorySearchItem[]>>(`/api/categories/search?q=${searchTerm}`);
+    return get<ApiResponse<CategorySearchItem[]>>(`/categories/search?q=${searchTerm}`);
 }
 
 export function useSearchCategories(searchTerm: string) {
     return useQuery({
-        queryKey: ["brands", searchTerm],
+        queryKey: ["categories", searchTerm],
         queryFn: () => searchCategories(searchTerm)
     });
 }

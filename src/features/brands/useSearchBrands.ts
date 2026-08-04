@@ -4,7 +4,7 @@ import type { ApiResponse } from "@/shared/types";
 import { useQuery } from "@tanstack/react-query";
 
 function searchBrands(searchTerm: string) {
-    return get<ApiResponse<BrandSearchItem[]>>(`/api/brands/search?q=${searchTerm}`);
+    return get<ApiResponse<BrandSearchItem[]>>(`/brands/search?q=${searchTerm}`);
 }
 
 export function useSearchBrands(searchTerm: string) {
