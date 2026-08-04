@@ -15,9 +15,15 @@ vi.mock("@/components/ui/form/on-submit-action", () => ({
 }));
 
 describe("GenericForm", () => {
-    const mockFields = [
-        { name: "email", labelKey: "email.label", type: "email" },
-        { name: "username", labelKey: "username.label", type: "text" }
+    const mockSections = [
+        {
+            id: "general-section",
+            titleKey: "section.general.title",
+            fields: [
+                { name: "email", labelKey: "email.label", type: "email" },
+                { name: "username", labelKey: "username.label", type: "text" }
+            ]
+        }
     ] as any;
 
     const mockAction = vi.fn();
@@ -28,9 +34,10 @@ describe("GenericForm", () => {
         vi.clearAllMocks();
     });
 
-    it("renders all provided fields, children, and actual SubmitButton", () => {
+    it("renders all provided sections, fields, children, and actual SubmitButton", () => {
         renderComponent();
 
+        expect(screen.getByText("section.general.title")).toBeInTheDocument();
         expect(screen.getByLabelText("email.label")).toHaveAttribute("type", "email");
         expect(screen.getByLabelText("username.label")).toHaveAttribute("type", "text");
         expect(screen.getByRole("button", { name: "submit.key" })).toBeInTheDocument();
@@ -81,7 +88,7 @@ describe("GenericForm", () => {
     function renderComponent() {
         render(
             <GenericForm
-                fields={mockFields}
+                sections={mockSections}
                 action={mockAction}
                 schema={mockSchema}
                 onFormSuccess={mockOnFormSuccess}
