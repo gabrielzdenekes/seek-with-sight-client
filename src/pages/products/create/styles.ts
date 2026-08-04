@@ -2,8 +2,9 @@ import type { SxProps, Theme } from "@mui/material";
 
 export const formContainerSx: SxProps<Theme> = {
     p: 3,
-    maxWidth: 1200,
+    maxWidth: 768, // Reduced from 1200 for a cleaner single-column width
     mx: "auto",
+    width: "100%",
 };
 
 export const headerStackSx: SxProps<Theme> = {

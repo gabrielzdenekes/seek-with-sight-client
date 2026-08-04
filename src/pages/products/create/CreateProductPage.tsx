@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import {
     Box,
     Button,
-    Grid,
     Paper,
     Stack,
     TextField,
@@ -77,144 +76,131 @@ export default function CreateProductPage() {
             containerSx={styles.formContainerSx}
             onFormSuccess={() => setImages([])}
         >
-            <Grid container spacing={3}>
-                {/* Left Column */}
-                <Grid sx={{ xs: 12, md: 8 }}>
-                    <Stack spacing={3}>
-                        <Paper sx={styles.paperCardSx}>
-                            <Typography variant="h6" sx={styles.sectionTitleSx}>
-                                Basic Information
-                            </Typography>
-                            <Stack spacing={2}>
-                                <TextField name="name" label="Product Name" fullWidth />
-                                <TextField name="slug" label="Slug (URL)" fullWidth />
-                                <TextField
-                                    name="shortDescription"
-                                    label="Short Description"
-                                    multiline
-                                    rows={2}
-                                    fullWidth
-                                />
-                                <TextField
-                                    name="description"
-                                    label="Full Description"
-                                    multiline
-                                    rows={5}
-                                    fullWidth
-                                />
-                            </Stack>
-                        </Paper>
-
-                        {/* Media Section */}
-                        <Paper sx={styles.paperCardSx}>
-                            <Typography variant="h6" sx={styles.sectionTitleSx}>
-                                Media
-                            </Typography>
-                            <Button
-                                component="label"
-                                variant="outlined"
-                                startIcon={<CloudUploadIcon />}
-                                sx={styles.uploadButtonSx}
-                            >
-                                Upload Images
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    name="images"
-                                    hidden
-                                    multiple
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                />
-                            </Button>
-
-                            <Stack direction="row" spacing={2} sx={styles.imageScrollStackSx}>
-                                {images.map((img, idx) => (
-                                    <Box key={`${img.name}-${idx}`} sx={styles.imagePreviewBoxSx}>
-                                        <img
-                                            src={URL.createObjectURL(img)}
-                                            alt={`Preview ${idx + 1}`}
-                                            style={styles.imagePreviewImgStyle}
-                                        />
-                                        <IconButton
-                                            size="small"
-                                            color="error"
-                                            sx={styles.deleteIconButtonSx}
-                                            onClick={() => handleRemoveImage(idx)} // <-- Connected here
-                                        >
-                                            <DeleteIcon fontSize="small" />
-                                        </IconButton>
-                                    </Box>
-                                ))}
-                            </Stack>
-                        </Paper>
-
-                        {/* Pricing & Inventory */}
-                        <Paper sx={styles.paperCardSx}>
-                            <Typography variant="h6" sx={styles.sectionTitleSx}>
-                                Pricing & Inventory
-                            </Typography>
-                            <Stack direction="row" spacing={2}>
-                                <TextField
-                                    name="price"
-                                    type="number"
-                                    label="Price"
-                                    defaultValue={0}
-                                    fullWidth
-                                />
-                                <TextField
-                                    name="quantity"
-                                    type="number"
-                                    label="Quantity"
-                                    defaultValue={1}
-                                    fullWidth
-                                />
-                            </Stack>
-                        </Paper>
+            <Stack spacing={3}>
+                <Paper sx={styles.paperCardSx}>
+                    <Typography variant="h6" sx={styles.sectionTitleSx}>
+                        Basic Information
+                    </Typography>
+                    <Stack spacing={2}>
+                        <TextField name="name" label="Product Name" fullWidth />
+                        <TextField name="slug" label="Slug (URL)" fullWidth />
+                        <TextField
+                            name="shortDescription"
+                            label="Short Description"
+                            multiline
+                            rows={2}
+                            fullWidth
+                        />
+                        <TextField
+                            name="description"
+                            label="Full Description"
+                            multiline
+                            rows={5}
+                            fullWidth
+                        />
                     </Stack>
-                </Grid>
+                </Paper>
 
-                <Grid sx={{ md: 4, xs: 12 }}>
-                    <Stack spacing={3}>
-                        {/* Status */}
-                        <Paper sx={styles.paperCardSx}>
-                            <Typography variant="h6" sx={styles.sectionTitleSx}>
-                                Status
-                            </Typography>
-                            <TextField
-                                name="status"
-                                select
-                                fullWidth
-                                defaultValue="DRAFT"
-                                label="Product Status"
-                            >
-                                <MenuItem value="ACTIVE">Active</MenuItem>
-                                <MenuItem value="DRAFT">Draft</MenuItem>
-                                <MenuItem value="ARCHIVED">Archived</MenuItem>
-                            </TextField>
-                        </Paper>
+                <Paper sx={styles.paperCardSx}>
+                    <Typography variant="h6" sx={styles.sectionTitleSx}>
+                        Media
+                    </Typography>
+                    <Button
+                        component="label"
+                        variant="outlined"
+                        startIcon={<CloudUploadIcon />}
+                        sx={styles.uploadButtonSx}
+                    >
+                        Upload Images
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            name="images"
+                            hidden
+                            multiple
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                        />
+                    </Button>
 
-                        {/* Organization */}
-                        <Paper sx={styles.paperCardSx}>
-                            <Typography variant="h6" sx={styles.sectionTitleSx}>
-                                Organization
-                            </Typography>
-                            <Stack spacing={2}>
-                                <FormAutocomplete
-                                    name="categoryId"
-                                    label="Category"
-                                    useQueryHook={useCategoryOptions}
+                    <Stack direction="row" spacing={2} sx={styles.imageScrollStackSx}>
+                        {images.map((img, idx) => (
+                            <Box key={`${img.name}-${idx}`} sx={styles.imagePreviewBoxSx}>
+                                <img
+                                    src={URL.createObjectURL(img)}
+                                    alt={`Preview ${idx + 1}`}
+                                    style={styles.imagePreviewImgStyle}
                                 />
-                                <FormAutocomplete
-                                    name="brandId"
-                                    label="Brand"
-                                    useQueryHook={useBrandOptions}
-                                />
-                            </Stack>
-                        </Paper>
+                                <IconButton
+                                    size="small"
+                                    color="error"
+                                    sx={styles.deleteIconButtonSx}
+                                    onClick={() => handleRemoveImage(idx)}
+                                >
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
+                            </Box>
+                        ))}
                     </Stack>
-                </Grid>
-            </Grid>
+                </Paper>
+
+                <Paper sx={styles.paperCardSx}>
+                    <Typography variant="h6" sx={styles.sectionTitleSx}>
+                        Pricing & Inventory
+                    </Typography>
+                    <Stack spacing={2}>
+                        <TextField
+                            name="price"
+                            type="number"
+                            label="Price"
+                            defaultValue={0}
+                            fullWidth
+                        />
+                        <TextField
+                            name="quantity"
+                            type="number"
+                            label="Quantity"
+                            defaultValue={1}
+                            fullWidth
+                        />
+                    </Stack>
+                </Paper>
+
+                <Paper sx={styles.paperCardSx}>
+                    <Typography variant="h6" sx={styles.sectionTitleSx}>
+                        Status
+                    </Typography>
+                    <TextField
+                        name="status"
+                        select
+                        fullWidth
+                        defaultValue="DRAFT"
+                        label="Product Status"
+                    >
+                        <MenuItem value="ACTIVE">Active</MenuItem>
+                        <MenuItem value="DRAFT">Draft</MenuItem>
+                        <MenuItem value="ARCHIVED">Archived</MenuItem>
+                    </TextField>
+                </Paper>
+
+                <Paper sx={styles.paperCardSx}>
+                    <Typography variant="h6" sx={styles.sectionTitleSx}>
+                        Organization
+                    </Typography>
+                    <Stack spacing={2}>
+                        <FormAutocomplete
+                            name="categoryId"
+                            label="Category"
+                            useQueryHook={useCategoryOptions}
+                        />
+                        <FormAutocomplete
+                            name="brandId"
+                            label="Brand"
+                            useQueryHook={useBrandOptions}
+                        />
+                    </Stack>
+                </Paper>
+            </Stack>
         </GenericForm>
     );
 }
