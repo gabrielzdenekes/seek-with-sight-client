@@ -24,7 +24,7 @@ export async function onSubmitAction(
     try {
         await action(validated.data);
 
-        return { success: true };
+        return { success: true, errors: null, message: null };
     } catch (e) {
         const apiErrorResponse = tryResolveApiErrorResponse(e);
 

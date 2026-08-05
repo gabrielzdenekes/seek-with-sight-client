@@ -76,7 +76,8 @@
                 "media": "Media",
                 "pricing": "Pricing & Inventory",
                 "status": "Status",
-                "organization": "Organization"
+                "organization": "Organization",
+                "variants": "Product Variants"
             },
             "fields": {
                 "productName": "Product Name",
@@ -88,6 +89,32 @@
                 "status": "Product Status",
                 "category": "Category",
                 "brand": "Brand"
+            },
+            "variants": {
+                "title": "Product Variants",
+                "empty": "No variants added yet. Click below to add product variants.",
+                "add": "Add Variant",
+                "header": "Variant #{{number}}",
+                "mediaTitle": "Variant Images",
+                "imagesAttached": "{{count}} image(s) attached",
+                "fields": {
+                    "title": "Variant Title",
+                    "titlePlaceholder": "e.g. Red / XL",
+                    "sku": "SKU",
+                    "skuPlaceholder": "e.g. PROD-RED-XL",
+                    "price": "Price",
+                    "quantity": "Quantity"
+                },
+                "errors": {
+                    "titleMin": "Title must be at least 2 characters",
+                    "titleMax": "Title cannot exceed 300 characters",
+                    "skuFormat": "SKU must contain only uppercase letters, numbers, underscores, and hyphens",
+                    "priceInvalid": "Invalid price format",
+                    "priceMin": "Price cannot be negative",
+                    "quantityInvalid": "Invalid quantity format",
+                    "quantityInt": "Quantity must be an integer",
+                    "quantityMin": "Quantity must be at least 1"
+                }
             },
             "statusOptions": {
                 "active": "Active",
