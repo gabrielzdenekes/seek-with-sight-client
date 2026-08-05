@@ -10,7 +10,7 @@ export interface FormState {
 export interface FormFieldDef {
     name: string;
     labelKey: string;
-    type?: "text" | "number" | "select" | "custom" | "email" | "password";
+    type?: "text" | "number" | "select" | "custom" | "email" | "password" | "tel";
     defaultValue?: string | number;
     options?: { value: string | number; labelKey: string }[];
     customRender?: (fieldError?: string) => ReactNode;
